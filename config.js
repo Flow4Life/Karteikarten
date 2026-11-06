@@ -1,12 +1,1 @@
-// Firebase-Verbindung. Solange hier null steht, läuft die App im lokalen Modus (ohne Konten).
-// Nach dem Anlegen des Firebase-Projekts die Werte aus der Firebase-Konsole hier eintragen:
-//
-// window.FIREBASE_CONFIG = {
-//   apiKey: "...",
-//   authDomain: "...firebaseapp.com",
-//   projectId: "...",
-//   storageBucket: "...appspot.com",
-//   messagingSenderId: "...",
-//   appId: "..."
-// };
-window.FIREBASE_CONFIG = null;
+window.FIREBASE_CONFIG = { apiKey: "AIzaSyBq0-Z1fmIrPvlnG0Xh3zTGAN2wGu6rl9w", authDomain: "hspv-karteikarten.firebaseapp.com", projectId: "hspv-karteikarten", storageBucket: "hspv-karteikarten.firebasestorage.app", messagingSenderId: "22565177750", appId: "1:22565177750:web:d34ac20c3e8e22fac2f5b7" };
