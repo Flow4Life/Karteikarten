@@ -12,47 +12,56 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="config.js"></script>
 <style>
 :root{
   --bg:#f5f6f8; --surface:#ffffff; --surface-2:#eef0f4; --text:#0f172a; --muted:#64748b;
   --line:#e2e5eb; --accent:#2f5bea; --accent-soft:#e6ecfd; --good:#16a34a; --good-soft:#dcfce7;
-  --bad:#dc2626; --bad-soft:#fee2e2; --shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06);
-  --r:16px;
+  --bad:#dc2626; --bad-soft:#fee2e2; --warn-soft:#fef3c7; --warn:#92400e;
+  --shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06); --r:16px;
   --b1:#cbd5e1; --b2:#f59e0b; --b3:#eab308; --b4:#22c55e; --b5:#2f5bea;
 }
 [data-theme="dark"]{
   --bg:#0b1020; --surface:#141a2e; --surface-2:#1c2440; --text:#e8ecf5; --muted:#8b95b0;
   --line:#26304f; --accent:#6d8cff; --accent-soft:#1e2a52; --good:#4ade80; --good-soft:#123222;
-  --bad:#f87171; --bad-soft:#3a1717; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
-  --b5:#6d8cff; --b1:#3b4566;
+  --bad:#f87171; --bad-soft:#3a1717; --warn-soft:#3a2e10; --warn:#fcd34d;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); --b1:#3b4566; --b5:#6d8cff;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
 body{min-height:100vh;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 button,input,textarea,select{font:inherit;color:inherit}
-.wrap{max-width:720px;margin:0 auto;padding:20px 18px 96px}
-header.top{display:flex;align-items:center;gap:12px;margin:8px 0 22px}
-header.top h1{font-size:24px;font-weight:700;margin:0;letter-spacing:-.02em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wrap{max-width:720px;margin:0 auto;padding:20px 18px 110px}
+header.top{display:flex;align-items:center;gap:10px;margin:8px 0 22px}
+header.top h1{font-size:26px;font-weight:700;margin:0;letter-spacing:-.02em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sub{color:var(--muted);font-size:14px}
-.iconbtn{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;flex:none}
+.iconbtn{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;flex:none;padding:0}
 .iconbtn:hover{background:var(--surface-2)}
 .iconbtn svg{width:20px;height:20px}
-.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:600;cursor:pointer;background:var(--surface-2);transition:transform .08s,filter .15s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:600;cursor:pointer;background:var(--surface-2);transition:transform .08s,filter .15s;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
 .btn:active{transform:scale(.98)}
 .btn.primary{background:var(--accent);color:#fff}
 .btn.primary:hover{filter:brightness(1.06)}
 .btn.ghost{background:transparent;border:1px solid var(--line)}
 .btn.danger{background:var(--bad-soft);color:var(--bad)}
+.btn.small{padding:8px 12px;font-size:14px;border-radius:10px}
 .btn.block{width:100%}
 .btn:disabled{opacity:.5;cursor:default}
+.btn svg{width:18px;height:18px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-.hero{padding:22px;display:flex;gap:18px;align-items:center;margin-bottom:22px}
-.hero .big{font-size:40px;font-weight:700;letter-spacing:-.03em;line-height:1}
-.hero .grow{flex:1}
-.section-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:26px 4px 10px}
+.hero{padding:22px;display:flex;gap:18px;align-items:center;margin-bottom:12px}
+.hero .big{font-size:42px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.hero .grow{flex:1;min-width:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px}
+.stat{padding:12px 14px}
+.stat b{display:block;font-size:20px;letter-spacing:-.02em}
+.stat span{font-size:12px;color:var(--muted)}
+.section-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:26px 4px 10px;display:flex;align-items:center;gap:8px}
+.folder-head{display:flex;align-items:center;gap:10px;padding:10px 4px;margin-top:14px;cursor:pointer;user-select:none}
+.folder-head .chev{transition:transform .2s;width:18px;height:18px;color:var(--muted)}
+.folder-head.closed .chev{transform:rotate(-90deg)}
+.folder-head .fname{font-weight:700;font-size:17px;flex:1}
+.folder-head svg.fic{width:20px;height:20px;color:var(--accent)}
 .deck{padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;margin-bottom:10px;transition:transform .1s}
 .deck:hover{transform:translateY(-1px)}
 .deck .name{font-weight:600}
@@ -61,7 +70,7 @@ header.top h1{font-size:24px;font-weight:700;margin:0;letter-spacing:-.02em;flex
 .pill.zero{background:var(--surface-2);color:var(--muted)}
 .bar{display:flex;height:6px;border-radius:99px;overflow:hidden;background:var(--surface-2);margin-top:8px}
 .bar span{display:block;height:100%}
-.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:14px}
 .legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
 .empty{padding:34px 22px;text-align:center;color:var(--muted)}
 .empty h3{color:var(--text);margin:0 0 6px}
@@ -71,26 +80,49 @@ header.top h1{font-size:24px;font-weight:700;margin:0;letter-spacing:-.02em;flex
 .list-item:last-child{border-bottom:0}
 .list-item .q{font-weight:600}
 .list-item .a{font-size:14px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.list-item .tags{font-size:12px;color:var(--muted);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap}
+.list-item mark{background:var(--warn-soft);color:inherit;border-radius:3px;padding:0 1px}
 .dot{width:10px;height:10px;border-radius:50%;margin-top:7px;flex:none}
-.search{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);margin-bottom:12px}
+.search{width:100%;padding:12px 14px 12px 40px;border-radius:12px;border:1px solid var(--line);background:var(--surface) no-repeat 13px center/18px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M21 21l-4.3-4.3'/%3E%3C/svg%3E");margin-bottom:12px;outline:none}
+.search:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 label.f{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:14px 0 6px}
 .input,textarea.input,select.input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);outline:none}
 .input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 textarea.input{min-height:120px;resize:vertical}
+textarea.input.short{min-height:70px}
+.chk{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:14px;color:var(--muted)}
+.media-box{border:1px dashed var(--line);border-radius:12px;padding:12px;margin-top:6px}
+.media-box img{max-width:100%;max-height:220px;border-radius:10px;display:block;margin:0 auto 10px}
+.media-box audio{width:100%;margin-bottom:8px}
+.ocr-status{font-size:13px;color:var(--muted);margin-top:8px}
+.rec{color:var(--bad);font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px}
+.rec::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--bad);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.3}}
 
 /* Learn */
-.learn-top{display:flex;align-items:center;gap:12px;margin:8px 0 18px}
+.learn-top{display:flex;align-items:center;gap:10px;margin:8px 0 18px}
 .progress{flex:1;height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}
 .progress span{display:block;height:100%;background:var(--accent);transition:width .3s}
 .scene{perspective:1400px;margin-bottom:18px}
-.flip{position:relative;min-height:min(62vh,520px);transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.2,1);cursor:pointer}
+.flip{position:relative;min-height:min(60vh,540px);transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .flip.on{transform:rotateY(180deg)}
-.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:26px 24px;display:flex;flex-direction:column;overflow:auto}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:24px 22px;display:flex;flex-direction:column;overflow:auto}
 .face.back{transform:rotateY(180deg)}
-.face .tag{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.face .front-text{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(22px,4.5vw,30px);font-weight:700;letter-spacing:-.02em;padding:18px 0}
-.face .back-text{flex:1;white-space:pre-wrap;font-size:17px;padding-top:14px}
-.face .src{font-size:13px;color:var(--muted);margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+.face .tag{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:flex;gap:8px;align-items:center}
+.face .tag .sp{flex:1}
+.face .tag > span:last-child{white-space:nowrap}
+.face .front-text{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:clamp(21px,4.5vw,29px);font-weight:700;letter-spacing:-.02em;padding:14px 0;white-space:pre-wrap}
+.face .front-text.long{font-size:17px;font-weight:500;text-align:left;align-items:stretch;letter-spacing:0}
+.face .front-text img,.face .back-img{max-width:100%;max-height:200px;border-radius:12px;margin:0 auto 12px;display:block}
+.face .back-text{white-space:pre-wrap;font-size:17px;padding-top:12px}
+.face .note{margin-top:14px;background:var(--warn-soft);color:var(--warn);border-radius:12px;padding:10px 12px;font-size:15px;white-space:pre-wrap}
+.face .note b.h{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.face .mine{margin-top:12px;background:var(--surface-2);border-radius:12px;padding:10px 12px;font-size:15px;white-space:pre-wrap}
+.face .mine b.h{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
+.face audio{width:100%;margin-top:12px}
+.face .src{font-size:13px;color:var(--muted);margin-top:auto;padding-top:14px}
+.face .src span{display:block;border-top:1px solid var(--line);padding-top:10px}
+.face textarea{width:100%;min-height:110px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);padding:12px;resize:vertical;outline:none;margin-top:6px}
 .hint{text-align:center;color:var(--muted);font-size:14px}
 .answer{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .answer .btn{padding:16px}
@@ -98,6 +130,9 @@ textarea.input{min-height:120px;resize:vertical}
 .btn.good{background:var(--good-soft);color:var(--good)}
 .done{text-align:center;padding:40px 20px}
 .done .big{font-size:56px;margin-bottom:8px}
+.toggles{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted)}
+.chip.on{background:var(--accent-soft);color:var(--accent);border-color:transparent}
 
 /* Modal */
 .modal-bg{position:fixed;inset:0;background:rgba(2,6,23,.5);display:flex;align-items:flex-end;justify-content:center;z-index:50;animation:fade .15s}
@@ -107,44 +142,50 @@ textarea.input{min-height:120px;resize:vertical}
 .modal h2{margin:0 0 4px;font-size:20px}
 .modal .actions{display:flex;gap:10px;margin-top:20px}
 .modal .actions .btn{flex:1}
+.modal p{line-height:1.55}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;font-weight:500;z-index:60;box-shadow:var(--shadow)}
+.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;font-weight:500;z-index:60;box-shadow:var(--shadow);max-width:90vw;text-align:center}
 
 /* Auth */
 .auth{max-width:400px;margin:8vh auto 0;padding:28px 24px}
 .logo{width:56px;height:56px;border-radius:16px;background:var(--accent);display:grid;place-items:center;margin-bottom:16px}
 .logo svg{width:30px;height:30px;color:#fff}
 .err{color:var(--bad);font-size:14px;margin-top:10px;min-height:20px}
-.link{background:none;border:0;color:var(--accent);cursor:pointer;padding:0;font-weight:600}
-.banner{font-size:13px;padding:10px 14px;border-radius:12px;background:var(--accent-soft);color:var(--accent);margin-bottom:16px}
+.link{background:none;border:0;color:var(--accent);cursor:pointer;padding:0;font-weight:600;font-size:inherit}
 .fab{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:calc(20px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:18px;background:var(--accent);color:#fff;border:0;display:grid;place-items:center;box-shadow:0 10px 30px rgba(47,91,234,.35);cursor:pointer;z-index:20}
 .fab svg{width:26px;height:26px}
 .settings-item{padding:16px 18px;border-bottom:1px solid var(--line)}
 .settings-item:last-child{border-bottom:0}
 .settings-item .t{font-weight:600}
 .settings-item .d{font-size:14px;color:var(--muted);margin:2px 0 10px}
-.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px}
-.seg button{border:0;background:none;padding:8px 14px;border-radius:9px;cursor:pointer;font-weight:500;font-size:14px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;padding:8px 12px;border-radius:9px;cursor:pointer;font-weight:500;font-size:14px}
 .seg button.on{background:var(--surface);box-shadow:var(--shadow)}
+.menu-list{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.menu-list .btn{justify-content:flex-start}
+.shared-item{padding:16px 18px;display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--good-soft);color:var(--good);margin-left:6px;vertical-align:middle}
 </style>
 </head>
 <body>
 <div id="app"></div>
 
 <script type="module">
-// ================== Startstapel (aus HSPV-Skripten, nur interner Gebrauch) ==================
-// Startstapel wird nicht öffentlich mitgeliefert (Skripte nur für internen Gebrauch) – Import über Datei.
-const STARTER = [];
-
-// ================== Hilfsfunktionen ==================
+// ================== Konstanten & Hilfsfunktionen ==================
+const APP_VERSION = '2.0';
 const DAY = 86400000;
 const INTERVALS = [0, 1, 3, 7, 16]; // Tage bis zur nächsten Abfrage je Fach 1–5
 const BOX_COLORS = ['var(--b1)','var(--b2)','var(--b3)','var(--b4)','var(--b5)'];
+const NO_FOLDER = 'Ohne Fach';
+const MAX_CARD_BYTES = 900000; // Firestore-Dokumentgrenze ist 1 MB
 const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmt = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+const fmt = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<i>$2</i>');
 const isDue = c => (c.due || 0) <= Date.now();
+const dayKey = (t=Date.now()) => { const d = new Date(t); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; };
+const norm = s => String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
 const ICON = {
   back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
   gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
@@ -152,63 +193,105 @@ const ICON = {
   dots:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>',
   close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
   cards:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="14" height="14" rx="2"/><path d="M7 2h12a2 2 0 0 1 2 2v12"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>',
+  folder:'<svg class="fic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
+  chev:'<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
+  users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+  camera:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+  mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/></svg>',
 };
 const storage = {
   get(k){ try { return localStorage.getItem(k); } catch { return null; } },
   set(k,v){ try { localStorage.setItem(k,v); } catch {} },
 };
+const prefs = {
+  get(k, d){ try { const v = JSON.parse(storage.get('kk-pref-'+k)); return v ?? d; } catch { return d; } },
+  set(k, v){ storage.set('kk-pref-'+k, JSON.stringify(v)); },
+};
 
 // ================== Datenspeicher ==================
 // Lokal (ohne Konto) oder Firebase (mit Konto, synchronisiert zwischen Geräten)
 class LocalStore {
-  constructor(){ this.key = 'kk-data-v1'; this.mode = 'local'; }
+  constructor(){ this.key = 'kk-data-v1'; this.mode = 'local'; this.meta = {}; }
   async start(onData){
-    let d = {decks:[], cards:[]};
-    try { d = JSON.parse(storage.get(this.key)) || d; } catch {}
+    let d = {decks:[], cards:[], meta:{}};
+    try { d = {...d, ...JSON.parse(storage.get(this.key))}; } catch {}
     this.decks = new Map(d.decks.map(x => [x.id, x]));
     this.cards = new Map(d.cards.map(x => [x.id, x]));
+    this.meta = d.meta || {};
     this.onData = onData; onData();
   }
-  save(){ storage.set(this.key, JSON.stringify({decks:[...this.decks.values()], cards:[...this.cards.values()]})); }
+  save(){ storage.set(this.key, JSON.stringify({decks:[...this.decks.values()], cards:[...this.cards.values()], meta:this.meta})); }
   async putDeck(d){ this.decks.set(d.id, d); this.save(); }
+  async putDecks(list){ list.forEach(d => this.decks.set(d.id, d)); this.save(); }
   async putCard(c){ this.cards.set(c.id, c); this.save(); }
   async putCards(list){ list.forEach(c => this.cards.set(c.id, c)); this.save(); }
   async delCard(id){ this.cards.delete(id); this.save(); }
   async delDeck(id){ this.decks.delete(id); for (const [k,c] of this.cards) if (c.deckId === id) this.cards.delete(k); this.save(); }
+  async putMeta(m){ this.meta = {...this.meta, ...m}; this.save(); }
+  async wipe(){ this.decks.clear(); this.cards.clear(); this.meta = {}; this.save(); }
 }
 
 class FirebaseStore {
-  constructor(fb, user){ this.fb = fb; this.user = user; this.mode = 'cloud'; this.decks = new Map(); this.cards = new Map(); }
+  constructor(fb, user){ this.fb = fb; this.user = user; this.mode = 'cloud'; this.decks = new Map(); this.cards = new Map(); this.meta = {}; }
   col(name){ return this.fb.collection(this.fb.db, 'users', this.user.uid, name); }
   ref(name, id){ return this.fb.doc(this.fb.db, 'users', this.user.uid, name, id); }
   async start(onData){
     this.onData = onData;
-    let ready = 0;
-    const done = () => { if (++ready >= 2) onData(); };
-    let first = {decks:true, cards:true};
+    try { const m = await this.fb.getDoc(this.ref('meta', 'stats')); this.meta = m.exists() ? m.data() : {}; } catch {}
+    let pending = 2; const first = {decks:true, cards:true};
+    const hit = k => { if (first[k]) { first[k] = false; if (--pending === 0) onData(); } else if (!pending) onData(); };
     this.unsub = [
-      this.fb.onSnapshot(this.col('decks'), snap => { this.decks = new Map(snap.docs.map(d => [d.id, d.data()])); first.decks ? (first.decks=false, done()) : onData(); }),
-      this.fb.onSnapshot(this.col('cards'), snap => { this.cards = new Map(snap.docs.map(d => [d.id, d.data()])); first.cards ? (first.cards=false, done()) : onData(); }),
+      this.fb.onSnapshot(this.col('decks'), snap => { this.decks = new Map(snap.docs.map(d => [d.id, d.data()])); hit('decks'); }, e => toast('Sync-Fehler: ' + e.code)),
+      this.fb.onSnapshot(this.col('cards'), snap => { this.cards = new Map(snap.docs.map(d => [d.id, d.data()])); hit('cards'); }, e => toast('Sync-Fehler: ' + e.code)),
     ];
   }
   stop(){ (this.unsub || []).forEach(u => u()); }
-  async putDeck(d){ this.decks.set(d.id, d); await this.fb.setDoc(this.ref('decks', d.id), d); }
-  async putCard(c){ this.cards.set(c.id, c); await this.fb.setDoc(this.ref('cards', c.id), c); }
-  async putCards(list){
-    for (let i = 0; i < list.length; i += 400) {
+  async batchWrite(ops){ // ops: [type, ref, data]
+    for (let i = 0; i < ops.length; i += 400) {
       const b = this.fb.writeBatch(this.fb.db);
-      list.slice(i, i+400).forEach(c => { this.cards.set(c.id, c); b.set(this.ref('cards', c.id), c); });
+      ops.slice(i, i+400).forEach(([t, r, d]) => t === 'set' ? b.set(r, d) : b.delete(r));
       await b.commit();
     }
+  }
+  async putDeck(d){ this.decks.set(d.id, d); await this.fb.setDoc(this.ref('decks', d.id), d); }
+  async putDecks(list){ list.forEach(d => this.decks.set(d.id, d)); await this.batchWrite(list.map(d => ['set', this.ref('decks', d.id), d])); }
+  async putCard(c){ this.cards.set(c.id, c); await this.fb.setDoc(this.ref('cards', c.id), c); }
+  async putCards(list){
+    list.forEach(c => this.cards.set(c.id, c));
+    // Karten mit Medien einzeln schreiben (Batch-Größenlimit 10 MB)
+    const heavy = list.filter(c => c.img || c.audio), light = list.filter(c => !c.img && !c.audio);
+    await this.batchWrite(light.map(c => ['set', this.ref('cards', c.id), c]));
+    for (const c of heavy) await this.fb.setDoc(this.ref('cards', c.id), c);
   }
   async delCard(id){ this.cards.delete(id); await this.fb.deleteDoc(this.ref('cards', id)); }
   async delDeck(id){
     const ids = [...this.cards.values()].filter(c => c.deckId === id).map(c => c.id);
     this.decks.delete(id); ids.forEach(i => this.cards.delete(i));
-    const b = this.fb.writeBatch(this.fb.db);
-    b.delete(this.ref('decks', id)); ids.slice(0, 450).forEach(i => b.delete(this.ref('cards', i)));
-    await b.commit();
+    await this.batchWrite([['del', this.ref('decks', id)], ...ids.map(i => ['del', this.ref('cards', i)])]);
   }
+  async putMeta(m){ this.meta = {...this.meta, ...m}; await this.fb.setDoc(this.ref('meta', 'stats'), this.meta); }
+  async wipe(){
+    await this.batchWrite([
+      ...[...this.decks.keys()].map(i => ['del', this.ref('decks', i)]),
+      ...[...this.cards.keys()].map(i => ['del', this.ref('cards', i)]),
+      ['del', this.ref('meta', 'stats')],
+    ]);
+    // eigene geteilte Stapel entfernen
+    const q = this.fb.query(this.fb.collection(this.fb.db, 'shared'), this.fb.where('owner', '==', this.user.uid));
+    const snap = await this.fb.getDocs(q);
+    await this.batchWrite(snap.docs.map(d => ['del', d.ref]));
+  }
+  // Geteilte Stapel (für alle angemeldeten Nutzer lesbar)
+  async listShared(){
+    const snap = await this.fb.getDocs(this.fb.collection(this.fb.db, 'shared'));
+    return snap.docs.map(d => ({id: d.id, ...d.data()})).sort((a,b) => (b.updated||0) - (a.updated||0));
+  }
+  sharedRef(id){ return this.fb.doc(this.fb.db, 'shared', id); }
+  async getShared(id){ const s = await this.fb.getDoc(this.sharedRef(id)); return s.exists() ? s.data() : null; }
+  async putShared(id, data){ await this.fb.setDoc(this.sharedRef(id), data); }
+  async delShared(id){ await this.fb.deleteDoc(this.sharedRef(id)); }
 }
 
 // ================== Zustand ==================
@@ -224,25 +307,26 @@ function applyTheme(){
 applyTheme();
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', applyTheme);
 
-function toast(msg){
+function toast(msg, ms=2400){
+  $$('.toast').forEach(t => t.remove());
   const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
-  document.body.appendChild(t); setTimeout(() => t.remove(), 2200);
+  document.body.appendChild(t); setTimeout(() => t.remove(), ms);
 }
 
-function modal(html, onMount){
+function modal(html, onMount, onClose){
   const bg = document.createElement('div'); bg.className = 'modal-bg';
-  bg.innerHTML = `<div class="modal" role="dialog">${html}</div>`;
-  const close = () => bg.remove();
+  bg.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}</div>`;
+  const close = () => { bg.remove(); onClose?.(); };
   bg.addEventListener('click', e => { if (e.target === bg) close(); });
   document.body.appendChild(bg);
   onMount?.(bg, close);
   return close;
 }
 
-function confirmBox(title, text, okLabel='Löschen'){
+function confirmBox(title, text, okLabel='Löschen', danger=true){
   return new Promise(res => {
     modal(`<h2>${esc(title)}</h2><p class="sub">${esc(text)}</p>
-      <div class="actions"><button class="btn ghost" data-x>Abbrechen</button><button class="btn danger" data-ok>${esc(okLabel)}</button></div>`,
+      <div class="actions"><button class="btn ghost" data-x>Abbrechen</button><button class="btn ${danger ? 'danger' : 'primary'}" data-ok>${esc(okLabel)}</button></div>`,
       (el, close) => {
         $('[data-x]', el).onclick = () => { close(); res(false); };
         $('[data-ok]', el).onclick = () => { close(); res(true); };
@@ -253,6 +337,8 @@ function confirmBox(title, text, okLabel='Löschen'){
 const decks = () => [...S.store.decks.values()].sort((a,b) => (a.created||0) - (b.created||0));
 const cardsOf = id => [...S.store.cards.values()].filter(c => c.deckId === id).sort((a,b) => (a.created||0) - (b.created||0));
 const allCards = () => [...S.store.cards.values()];
+const folders = () => [...new Set(decks().map(d => d.folder || NO_FOLDER))].sort((a,b) => a === NO_FOLDER ? 1 : b === NO_FOLDER ? -1 : a.localeCompare(b, 'de'));
+const cardBytes = c => JSON.stringify(c).length;
 
 function boxBar(list){
   const n = list.length || 1, counts = [0,0,0,0,0];
@@ -260,18 +346,34 @@ function boxBar(list){
   return `<div class="bar">${counts.map((k,i) => k ? `<span style="width:${k/n*100}%;background:${BOX_COLORS[i]}"></span>` : '').join('')}</div>`;
 }
 
+// ================== Statistik ==================
+function statsNow(){
+  const m = S.store.meta || {}, today = dayKey(), yest = dayKey(Date.now() - DAY);
+  const streak = (m.lastDay === today || m.lastDay === yest) ? (m.streak || 0) : 0;
+  return { streak, today: m.todayDate === today ? (m.todayCount || 0) : 0, total: m.total || 0 };
+}
+async function countReview(){
+  const m = S.store.meta || {}, today = dayKey(), yest = dayKey(Date.now() - DAY);
+  let streak = m.streak || 0;
+  if (m.lastDay !== today) streak = m.lastDay === yest ? streak + 1 : 1;
+  const todayCount = (m.todayDate === today ? (m.todayCount || 0) : 0) + 1;
+  try { await S.store.putMeta({streak, lastDay: today, todayDate: today, todayCount, total: (m.total || 0) + 1}); } catch {}
+}
+
 // ================== Ansichten ==================
 function render(){
   if (S.view === 'learn') return; // Lernsitzung nicht durch Sync-Updates unterbrechen
   if (S.view === 'deck' && !S.store.decks.has(S.deckId)) S.view = 'home';
-  ({home:renderHome, deck:renderDeck, settings:renderSettings})[S.view]();
+  ({home:renderHome, deck:renderDeck, settings:renderSettings, search:renderSearch, shared:renderShared})[S.view]();
 }
 
 function renderHome(){
   const all = allCards(), due = all.filter(isDue).length, sure = all.filter(c => (c.box||1) >= 4).length;
-  const ds = decks();
+  const ds = decks(), st = statsNow(), closed = prefs.get('closedFolders', []);
   app.innerHTML = `<div class="wrap">
     <header class="top"><h1>Karteikarten</h1>
+      ${ds.length ? `<button class="iconbtn" data-act="search" aria-label="Suchen">${ICON.search}</button>` : ''}
+      ${S.store.mode === 'cloud' ? `<button class="iconbtn" data-act="shared" aria-label="Geteilte Stapel">${ICON.users}</button>` : ''}
       <button class="iconbtn" data-act="settings" aria-label="Einstellungen">${ICON.gear}</button></header>
     ${ds.length ? `
     <div class="card hero">
@@ -282,45 +384,71 @@ function renderHome(){
       </div>
       <button class="btn primary" data-act="learn-all" ${due ? '' : 'disabled'}>Lernen</button>
     </div>
-    <div class="section-title">Stapel</div>
-    ${ds.map(d => { const cs = cardsOf(d.id), du = cs.filter(isDue).length; return `
-      <div class="card deck" data-deck="${esc(d.id)}">
-        <div style="flex:1;min-width:0">
-          <div class="name">${esc(d.name)}</div>
-          <div class="meta">${cs.length} Karten</div>
-          ${boxBar(cs)}
-        </div>
-        <span class="pill ${du ? '' : 'zero'}">${du} fällig</span>
-      </div>`; }).join('')}
-    <div class="legend">${['Fach 1','Fach 2','Fach 3','Fach 4','Fach 5'].map((l,i) => `<span><i style="background:${BOX_COLORS[i]}"></i>${l}</span>`).join('')}</div>
+    <div class="stats">
+      <div class="card stat"><b>${st.streak ? '🔥 ' + st.streak : '–'}</b><span>Tage Serie</span></div>
+      <div class="card stat"><b>${st.today}</b><span>heute gelernt</span></div>
+      <div class="card stat"><b>${all.length ? Math.round(sure / all.length * 100) : 0} %</b><span>sicher</span></div>
+    </div>
+    ${folders().map(f => { const fd = ds.filter(d => (d.folder || NO_FOLDER) === f), fc = fd.flatMap(d => cardsOf(d.id)), fdue = fc.filter(isDue).length, isClosed = closed.includes(f); return `
+      <div class="folder-head ${isClosed ? 'closed' : ''}" data-folder="${esc(f)}">
+        ${ICON.folder}<span class="fname">${esc(f)}</span>
+        <span class="pill ${fdue ? '' : 'zero'}">${fdue} fällig</span>${ICON.chev}
+      </div>
+      ${isClosed ? '' : fd.map(d => { const cs = cardsOf(d.id), du = cs.filter(isDue).length; return `
+        <div class="card deck" data-deck="${esc(d.id)}">
+          <div style="flex:1;min-width:0">
+            <div class="name">${esc(d.name)}${d.sharedFrom ? '<span class="badge">geteilt</span>' : ''}</div>
+            <div class="meta">${cs.length} Karten</div>
+            ${boxBar(cs)}
+          </div>
+          <span class="pill ${du ? '' : 'zero'}">${du} fällig</span>
+        </div>`; }).join('')}`; }).join('')}
+    <div class="legend">${['Neu/Fach 1','Fach 2','Fach 3','Fach 4','Fach 5'].map((l,i) => `<span><i style="background:${BOX_COLORS[i]}"></i>${l}</span>`).join('')}</div>
     ` : `
     <div class="card empty">
       <h3>Noch keine Karten</h3>
-      <p>Lege einen eigenen Stapel an oder importiere eine Stapel-Datei.</p>
+      <p>Lege einen eigenen Stapel an, importiere eine Stapel-Datei${S.store.mode === 'cloud' ? ' oder übernimm einen Stapel aus der Klasse' : ''}.</p>
       <div class="row" style="margin-top:16px">
-        ${STARTER.length ? '<button class="btn primary" data-act="starter">Startstapel übernehmen</button>' : '<button class="btn primary" data-act="import-file">Stapel-Datei importieren</button><input type="file" accept=".json,application/json" hidden data-file>'}
-        <button class="btn ghost" data-act="new-deck">Eigener Stapel</button>
+        <button class="btn primary" data-act="new-deck">Neuer Stapel</button>
+        <button class="btn ghost" data-act="import-file">Datei importieren</button>
+        ${S.store.mode === 'cloud' ? '<button class="btn ghost" data-act="shared">Aus der Klasse</button>' : ''}
       </div>
+      <input type="file" accept=".json,application/json" hidden data-file>
     </div>`}
   </div>
   <button class="fab" data-act="new-deck" aria-label="Neuer Stapel">${ICON.plus}</button>`;
   const fi = $('[data-file]'); if (fi) fi.onchange = e => importData(e.target.files[0]);
   app.onclick = e => {
     const deck = e.target.closest('[data-deck]');
-    if (deck) { S.deckId = deck.dataset.deck; S.view = 'deck'; S.query=''; return render(); }
+    if (deck) { S.deckId = deck.dataset.deck; S.view = 'deck'; S.query = ''; return render(); }
+    const fh = e.target.closest('[data-folder]');
+    if (fh) { const f = fh.dataset.folder, c = prefs.get('closedFolders', []); prefs.set('closedFolders', c.includes(f) ? c.filter(x => x !== f) : [...c, f]); return render(); }
     const act = e.target.closest('[data-act]')?.dataset.act;
     if (act === 'settings') { S.view = 'settings'; render(); }
+    if (act === 'search') { S.view = 'search'; S.query = ''; render(); }
+    if (act === 'shared') { S.view = 'shared'; render(); }
     if (act === 'new-deck') deckDialog();
-    if (act === 'starter') addStarter();
-    if (act === 'learn-all') startLearn(null, false);
     if (act === 'import-file') $('[data-file]').click();
+    if (act === 'learn-all') startLearn(null, false);
   };
 }
 
+function cardRow(c, q, showDeck){
+  const hl = s => { const t = esc(s); if (!q) return t; const i = norm(s).indexOf(norm(q)); return i < 0 ? t : esc(s.slice(0,i)) + '<mark>' + esc(s.slice(i, i+q.length)) + '</mark>' + esc(s.slice(i+q.length)); };
+  const backSnip = (() => { if (!q) return c.back; const i = norm(c.back).indexOf(norm(q)); return i > 60 ? '…' + c.back.slice(i - 40) : c.back; })();
+  const deck = showDeck ? S.store.decks.get(c.deckId) : null;
+  const tags = [deck && esc(deck.name), c.img && '📷 Foto', c.audio && '🎙️ Memo', c.note && '📝 Notiz'].filter(Boolean);
+  return `<div class="list-item" data-card="${esc(c.id)}">
+    <span class="dot" style="background:${BOX_COLORS[(c.box||1)-1]}" title="Fach ${c.box||1}"></span>
+    <div style="min-width:0;flex:1"><div class="q">${hl(c.front)}</div><div class="a">${hl(backSnip)}</div>
+    ${tags.length ? `<div class="tags">${tags.map(t => `<span>${t}</span>`).join('')}</div>` : ''}</div>
+  </div>`;
+}
+function matches(c, q){ const n = norm(q); return !n || norm(c.front + ' ' + c.back + ' ' + (c.source||'') + ' ' + (c.note||'')).includes(n); }
+
 function renderDeck(){
   const d = S.store.decks.get(S.deckId), cs = cardsOf(d.id), due = cs.filter(isDue).length;
-  const q = S.query.toLowerCase();
-  const shown = q ? cs.filter(c => (c.front + ' ' + c.back + ' ' + (c.source||'')).toLowerCase().includes(q)) : cs;
+  const shown = cs.filter(c => matches(c, S.query));
   app.innerHTML = `<div class="wrap">
     <header class="top">
       <button class="iconbtn" data-act="back" aria-label="Zurück">${ICON.back}</button>
@@ -328,24 +456,19 @@ function renderDeck(){
       <button class="iconbtn" data-act="menu" aria-label="Stapel bearbeiten">${ICON.dots}</button>
     </header>
     <div class="card hero">
-      <div class="grow"><div class="big">${due}</div><div class="sub">von ${cs.length} Karten fällig</div>${boxBar(cs)}</div>
+      <div class="grow"><div class="sub" style="margin-bottom:4px">${esc(d.folder || NO_FOLDER)}</div><div class="big">${due}</div><div class="sub">von ${cs.length} Karten fällig</div>${boxBar(cs)}</div>
     </div>
     <div class="row" style="margin-bottom:8px">
       <button class="btn primary" data-act="learn" ${due ? '' : 'disabled'}>Fällige lernen</button>
       <button class="btn ghost" data-act="learn-free" ${cs.length ? '' : 'disabled'}>Alle durchgehen</button>
     </div>
     <div class="section-title">Karten</div>
-    ${cs.length > 6 ? `<input class="search" placeholder="Karten durchsuchen …" value="${esc(S.query)}" data-search>` : ''}
-    ${cs.length ? `<div class="card">${shown.map(c => `
-      <div class="list-item" data-card="${esc(c.id)}">
-        <span class="dot" style="background:${BOX_COLORS[(c.box||1)-1]}" title="Fach ${c.box||1}"></span>
-        <div style="min-width:0"><div class="q">${esc(c.front)}</div><div class="a">${esc(c.back)}</div></div>
-      </div>`).join('') || '<div class="empty">Keine Treffer</div>'}</div>`
-    : `<div class="card empty"><h3>Leerer Stapel</h3><p>Füge über den Plus-Button deine erste Karte hinzu.</p></div>`}
+    ${cs.length > 5 ? `<input class="search" type="search" placeholder="In diesem Stapel suchen …" value="${esc(S.query)}" data-search>` : ''}
+    <div data-list>${listHtml(shown, cs.length)}</div>
   </div>
   <button class="fab" data-act="new-card" aria-label="Neue Karte">${ICON.plus}</button>`;
   const s = $('[data-search]');
-  if (s) s.oninput = e => { S.query = e.target.value; const pos = e.target.selectionStart; renderDeck(); const n = $('[data-search]'); n.focus(); n.setSelectionRange(pos,pos); };
+  if (s) s.oninput = e => { S.query = e.target.value; $('[data-list]').innerHTML = listHtml(cs.filter(c => matches(c, S.query)), cs.length); };
   app.onclick = e => {
     const card = e.target.closest('[data-card]');
     if (card) return cardDialog(S.store.cards.get(card.dataset.card));
@@ -356,26 +479,60 @@ function renderDeck(){
     if (act === 'learn-free') startLearn(d.id, true);
     if (act === 'menu') deckMenu(d);
   };
+  function listHtml(list, total){
+    if (!total) return `<div class="card empty"><h3>Leerer Stapel</h3><p>Füge über den Plus-Button deine erste Karte hinzu – oder über „…“ mehrere auf einmal.</p></div>`;
+    return `<div class="card">${list.map(c => cardRow(c, S.query)).join('') || '<div class="empty">Keine Treffer</div>'}</div>`;
+  }
+}
+
+function renderSearch(){
+  app.innerHTML = `<div class="wrap">
+    <header class="top"><button class="iconbtn" data-act="back" aria-label="Zurück">${ICON.back}</button><h1>Suchen</h1></header>
+    <input class="search" type="search" placeholder="Begriff, Definition, Paragraf …" value="${esc(S.query)}" data-search autofocus>
+    <div data-results></div>
+  </div>`;
+  const inp = $('[data-search]'), out = $('[data-results]');
+  const run = () => {
+    const q = inp.value.trim(); S.query = q;
+    if (!q) { out.innerHTML = `<p class="sub" style="text-align:center;margin-top:30px">Durchsucht Vorder- und Rückseiten, Fundstellen und Notizen aller Stapel.</p>`; return; }
+    const res = allCards().filter(c => matches(c, q))
+      .sort((a,b) => (norm(b.front).includes(norm(q)) - norm(a.front).includes(norm(q))) || a.front.localeCompare(b.front, 'de'));
+    out.innerHTML = `<div class="section-title">${res.length} Treffer</div>` + (res.length ? `<div class="card">${res.slice(0,150).map(c => cardRow(c, q, true)).join('')}</div>` : '');
+  };
+  inp.oninput = run; run(); setTimeout(() => inp.focus(), 50);
+  app.onclick = e => {
+    const card = e.target.closest('[data-card]');
+    if (card) return cardDialog(S.store.cards.get(card.dataset.card), run);
+    if (e.target.closest('[data-act="back"]')) { S.view = 'home'; S.query = ''; render(); }
+  };
 }
 
 function deckMenu(d){
+  const cloud = S.store.mode === 'cloud';
   modal(`<h2>${esc(d.name)}</h2>
-    <div class="row" style="flex-direction:column;margin-top:16px">
-      <button class="btn" data-a="rename">Umbenennen</button>
-      <button class="btn" data-a="bulk">Mehrere Karten einfügen</button>
-      <button class="btn" data-a="reset">Lernfortschritt zurücksetzen</button>
-      <button class="btn danger" data-a="del">Stapel löschen</button>
-      <button class="btn ghost" data-a="x">Schließen</button>
+    <div class="menu-list">
+      <button class="btn" data-a="rename">✏️ Umbenennen / Fach ändern</button>
+      <button class="btn" data-a="bulk">📋 Mehrere Karten einfügen</button>
+      ${cloud ? `<button class="btn" data-a="share">👥 ${d.sharedId ? 'Geteilten Stapel aktualisieren' : 'Mit der Klasse teilen'}</button>` : ''}
+      ${cloud && d.sharedId ? '<button class="btn" data-a="unshare">🚫 Teilen beenden</button>' : ''}
+      <button class="btn" data-a="export">💾 Diesen Stapel exportieren</button>
+      <button class="btn" data-a="reset">↺ Lernfortschritt zurücksetzen</button>
+      <button class="btn danger" data-a="del">🗑️ Stapel löschen</button>
+      <button class="btn ghost" data-a="x" style="justify-content:center">Schließen</button>
     </div>`, (el, close) => {
     el.onclick = async e => {
       const a = e.target.closest('[data-a]')?.dataset.a; if (!a) return;
       close();
       if (a === 'rename') deckDialog(d);
       if (a === 'bulk') bulkDialog(d);
+      if (a === 'share') shareDeck(d);
+      if (a === 'unshare') unshareDeck(d);
+      if (a === 'export') exportData([d]);
       if (a === 'reset' && await confirmBox('Fortschritt zurücksetzen?', 'Alle Karten dieses Stapels kommen zurück in Fach 1.', 'Zurücksetzen')) {
         await S.store.putCards(cardsOf(d.id).map(c => ({...c, box:1, due:0}))); render(); toast('Zurückgesetzt');
       }
       if (a === 'del' && await confirmBox('Stapel löschen?', `„${d.name}“ und alle ${cardsOf(d.id).length} Karten werden gelöscht.`)) {
+        if (d.sharedId) { try { await S.store.delShared(d.sharedId); } catch {} }
         await S.store.delDeck(d.id); S.view = 'home'; render(); toast('Stapel gelöscht');
       }
     };
@@ -383,15 +540,25 @@ function deckMenu(d){
 }
 
 function deckDialog(d){
-  modal(`<h2>${d ? 'Stapel umbenennen' : 'Neuer Stapel'}</h2>
-    <form><label class="f">Name</label><input class="input" name="n" required maxlength="80" placeholder="z.B. Eingriffsrecht – PolG NRW" value="${esc(d?.name || '')}">
-    <div class="actions"><button type="button" class="btn ghost" data-x>Abbrechen</button><button class="btn primary">Speichern</button></div></form>`,
+  const fs = folders().filter(f => f !== NO_FOLDER);
+  const cur = d?.folder || '';
+  modal(`<h2>${d ? 'Stapel bearbeiten' : 'Neuer Stapel'}</h2>
+    <form>
+      <label class="f">Name</label><input class="input" name="n" required maxlength="80" placeholder="z.B. Gefahrenabwehr – Standardmaßnahmen" value="${esc(d?.name || '')}">
+      <label class="f">Fach / Ordner</label>
+      <input class="input" name="folder" list="folder-list" maxlength="40" placeholder="z.B. Eingriffsrecht" value="${esc(cur)}">
+      <datalist id="folder-list">${fs.map(f => `<option value="${esc(f)}">`).join('')}</datalist>
+      ${fs.length ? `<div class="toggles" style="margin-top:8px">${fs.map(f => `<button type="button" class="chip ${f === cur ? 'on' : ''}" data-f="${esc(f)}">${esc(f)}</button>`).join('')}</div>` : '<p class="sub" style="margin:6px 0 0">Stapel mit gleichem Fach werden auf dem Startbildschirm zusammen angezeigt.</p>'}
+      <div class="actions"><button type="button" class="btn ghost" data-x>Abbrechen</button><button class="btn primary">Speichern</button></div>
+    </form>`,
     (el, close) => {
-      const inp = $('input', el); setTimeout(() => inp.focus(), 50);
+      const f = $('form', el); setTimeout(() => f.n.focus(), 50);
       $('[data-x]', el).onclick = close;
-      $('form', el).onsubmit = async e => {
-        e.preventDefault(); const name = inp.value.trim(); if (!name) return;
-        const deck = d ? {...d, name} : {id: uid(), name, created: Date.now()};
+      $$('[data-f]', el).forEach(b => b.onclick = () => { f.folder.value = b.dataset.f; $$('[data-f]', el).forEach(x => x.classList.toggle('on', x === b)); });
+      f.onsubmit = async e => {
+        e.preventDefault(); const name = f.n.value.trim(); if (!name) return;
+        const folder = f.folder.value.trim();
+        const deck = d ? {...d, name, folder} : {id: uid(), name, folder, created: Date.now()};
         await S.store.putDeck(deck); close();
         if (!d) { S.deckId = deck.id; S.view = 'deck'; }
         render();
@@ -399,38 +566,147 @@ function deckDialog(d){
     });
 }
 
-function cardDialog(c){
+// ---------- Medien: Foto verkleinern, Texterkennung, Sprachmemo ----------
+function compressImage(file, maxSide=1100, quality=.72){
+  return new Promise((res, rej) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const k = Math.min(1, maxSide / Math.max(img.width, img.height));
+      const c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('Bild konnte nicht gelesen werden')); };
+    img.src = url;
+  });
+}
+let tessPromise = null;
+function loadTesseract(){
+  if (window.Tesseract) return Promise.resolve(window.Tesseract);
+  return tessPromise ||= new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+    s.onload = () => res(window.Tesseract); s.onerror = () => { tessPromise = null; rej(new Error('Texterkennung konnte nicht geladen werden')); };
+    document.head.appendChild(s);
+  });
+}
+async function ocr(source, onProgress){
+  const T = await loadTesseract();
+  const r = await T.recognize(source, 'deu', { logger: m => m.status === 'recognizing text' && onProgress?.(Math.round(m.progress * 100)) });
+  return r.data.text.replace(/-\n(?=[a-zäöüß])/g, '').replace(/([^\n])\n(?!\n)/g, '$1 ').replace(/[ \t]+/g, ' ').trim();
+}
+const blobToDataURL = b => new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(b); });
+
+function cardDialog(c, after){
   const ds = decks();
+  const draft = { img: c?.img || '', imgFront: !!c?.imgFront, audio: c?.audio || '' };
+  let rec = null, recTimer = null;
   modal(`<h2>${c ? 'Karte bearbeiten' : 'Neue Karte'}</h2>
     <form>
       <label class="f">Begriff / Frage (Vorderseite)</label>
-      <input class="input" name="front" required value="${esc(c?.front || '')}" placeholder="z.B. Gefahr i.S.d. PolG">
+      <input class="input" name="front" required value="${esc(c?.front || '')}" placeholder="z.B. Gefahr i.S.d. PolG NRW">
       <label class="f">Definition / Antwort (Rückseite)</label>
-      <textarea class="input" name="back" required placeholder="Definition …">${esc(c?.back || '')}</textarea>
+      <textarea class="input" name="back" placeholder="Definition … (**fett**, *kursiv*)">${esc(c?.back || '')}</textarea>
+      <label class="f">📷 Foto</label>
+      <div class="media-box" data-imgbox></div>
+      <label class="f">📝 Notiz / Merkhilfe (optional)</label>
+      <textarea class="input short" name="note" placeholder="Eselsbrücke, Klausurtipp, Beispiel …">${esc(c?.note || '')}</textarea>
+      <label class="f">🎙️ Sprachmemo (optional)</label>
+      <div class="media-box" data-audiobox></div>
       <label class="f">Fundstelle (optional)</label>
       <input class="input" name="source" value="${esc(c?.source || '')}" placeholder="z.B. § 8 PolG NRW, Skript S. 12">
-      ${ds.length > 1 ? `<label class="f">Stapel</label><select class="input" name="deck">${ds.map(d => `<option value="${esc(d.id)}" ${d.id === (c?.deckId || S.deckId) ? 'selected' : ''}>${esc(d.name)}</option>`).join('')}</select>` : ''}
+      ${ds.length > 1 ? `<label class="f">Stapel</label><select class="input" name="deck">${ds.map(d => `<option value="${esc(d.id)}" ${d.id === (c?.deckId || S.deckId) ? 'selected' : ''}>${esc((d.folder ? d.folder + ' › ' : '') + d.name)}</option>`).join('')}</select>` : ''}
       <div class="actions">
         ${c ? '<button type="button" class="btn danger" data-del>Löschen</button>' : '<button type="button" class="btn ghost" data-x>Abbrechen</button>'}
         <button class="btn primary">Speichern</button>
       </div>
-      ${c ? '' : '<label style="display:flex;gap:8px;align-items:center;margin-top:14px;font-size:14px;color:var(--muted)"><input type="checkbox" name="more" checked> Danach weitere Karte anlegen</label>'}
+      ${c ? '' : '<label class="chk"><input type="checkbox" name="more" checked> Danach weitere Karte anlegen</label>'}
+      <input type="file" accept="image/*" hidden data-imgfile>
+      <input type="file" accept="image/*" hidden data-ocrfile>
     </form>`, (el, close) => {
-    const f = $('form', el); setTimeout(() => f.front.focus(), 50);
+    const f = $('form', el); if (!c) setTimeout(() => f.front.focus(), 50);
+    const imgBox = $('[data-imgbox]', el), audioBox = $('[data-audiobox]', el);
+    const drawImg = () => {
+      imgBox.innerHTML = draft.img
+        ? `<img src="${draft.img}" alt=""><label class="chk" style="margin:0 0 10px"><input type="checkbox" data-imgfront ${draft.imgFront ? 'checked' : ''}> Foto auf der Vorderseite zeigen (z.B. Verkehrszeichen)</label>
+           <div class="row"><button type="button" class="btn small ghost" data-act="img">Ersetzen</button><button type="button" class="btn small ghost" data-act="ocr-img">Text erkennen</button><button type="button" class="btn small danger" data-act="img-del">Entfernen</button></div>`
+        : `<div class="row"><button type="button" class="btn small ghost" data-act="img">${ICON.camera} Foto hinzufügen</button><button type="button" class="btn small ghost" data-act="ocr">🔤 Text aus Foto erkennen</button></div>
+           <p class="sub" style="margin:8px 0 0">„Text erkennen“: Skript oder Gesetz abfotografieren – der Text wird in die Definition übernommen.</p>`;
+      const cb = $('[data-imgfront]', imgBox); if (cb) cb.onchange = () => draft.imgFront = cb.checked;
+    };
+    const drawAudio = () => {
+      if (rec) { audioBox.innerHTML = `<div class="row" style="align-items:center"><span class="rec" data-rectime>Aufnahme läuft … 0 s</span><button type="button" class="btn small danger" data-act="rec-stop">Stopp</button></div>`; return; }
+      audioBox.innerHTML = draft.audio
+        ? `<audio controls src="${draft.audio}"></audio><div class="row"><button type="button" class="btn small ghost" data-act="rec">Neu aufnehmen</button><button type="button" class="btn small danger" data-act="audio-del">Entfernen</button></div>`
+        : `<button type="button" class="btn small ghost" data-act="rec">${ICON.mic} Aufnehmen</button> <span class="sub">max. 90 Sekunden</span>`;
+    };
+    drawImg(); drawAudio();
+
+    const runOcr = async (file, status) => {
+      status.textContent = 'Texterkennung wird geladen …';
+      try {
+        const src = await compressImage(file, 2000, .9);
+        const text = await ocr(src, p => status.textContent = `Text wird erkannt … ${p} %`);
+        if (!text) { status.textContent = 'Kein Text erkannt. Tipp: gerade, hell und nah fotografieren.'; return; }
+        f.back.value = f.back.value.trim() ? f.back.value.trim() + '\n\n' + text : text;
+        status.textContent = '✓ Text übernommen – bitte kurz prüfen und ggf. korrigieren.';
+        f.back.focus();
+      } catch (e) { status.textContent = '⚠️ ' + (e.message || 'Texterkennung fehlgeschlagen') + ' (Internetverbindung nötig).'; }
+    };
+    const statusLine = () => { let s = $('.ocr-status', imgBox); if (!s) { s = document.createElement('div'); s.className = 'ocr-status'; imgBox.appendChild(s); } return s; };
+
+    $('[data-imgfile]', el).onchange = async e => {
+      const file = e.target.files[0]; e.target.value = ''; if (!file) return;
+      try { draft.img = await compressImage(file); drawImg(); } catch (err) { toast(err.message); }
+    };
+    $('[data-ocrfile]', el).onchange = async e => {
+      const file = e.target.files[0]; e.target.value = ''; if (file) runOcr(file, statusLine());
+    };
+    el.addEventListener('click', async e => {
+      const act = e.target.closest('[data-act]')?.dataset.act; if (!act) return;
+      if (act === 'img') $('[data-imgfile]', el).click();
+      if (act === 'ocr') $('[data-ocrfile]', el).click();
+      if (act === 'ocr-img') { const b = await (await fetch(draft.img)).blob(); runOcr(b, statusLine()); }
+      if (act === 'img-del') { draft.img = ''; draft.imgFront = false; drawImg(); }
+      if (act === 'audio-del') { draft.audio = ''; drawAudio(); }
+      if (act === 'rec') {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+          const type = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm'].find(t => window.MediaRecorder?.isTypeSupported?.(t)) || '';
+          const chunks = []; const mr = new MediaRecorder(stream, type ? {mimeType: type, audioBitsPerSecond: 32000} : undefined);
+          mr.ondataavailable = ev => ev.data.size && chunks.push(ev.data);
+          mr.onstop = async () => {
+            stream.getTracks().forEach(t => t.stop()); clearInterval(recTimer); rec = null;
+            draft.audio = await blobToDataURL(new Blob(chunks, {type: mr.mimeType || type || 'audio/webm'})); drawAudio();
+          };
+          rec = mr; mr.start(); const t0 = Date.now(); drawAudio();
+          recTimer = setInterval(() => { const s = Math.round((Date.now() - t0) / 1000); const n = $('[data-rectime]', el); if (n) n.textContent = `Aufnahme läuft … ${s} s`; if (s >= 90) mr.stop(); }, 500);
+        } catch { toast('Kein Zugriff aufs Mikrofon. Bitte in den Einstellungen erlauben.'); }
+      }
+      if (act === 'rec-stop') rec?.stop();
+    });
+
     $('[data-x]', el)?.addEventListener('click', close);
     $('[data-del]', el)?.addEventListener('click', async () => {
-      close(); if (await confirmBox('Karte löschen?', c.front)) { await S.store.delCard(c.id); render(); toast('Karte gelöscht'); }
+      close(); if (await confirmBox('Karte löschen?', c.front)) { await S.store.delCard(c.id); render(); after?.(); toast('Karte gelöscht'); }
     });
     f.onsubmit = async e => {
       e.preventDefault();
+      if (rec) return toast('Bitte zuerst die Aufnahme stoppen');
+      if (!f.back.value.trim() && !draft.img && !draft.audio) return toast('Bitte eine Definition, ein Foto oder ein Memo hinzufügen');
       const deckId = f.deck?.value || c?.deckId || S.deckId;
       const card = c ? {...c} : {id: uid(), created: Date.now(), box: 1, due: 0};
-      Object.assign(card, {deckId, front: f.front.value.trim(), back: f.back.value.trim(), source: f.source.value.trim()});
-      await S.store.putCard(card); render();
-      if (!c && f.more?.checked) { f.front.value = ''; f.back.value = ''; f.front.focus(); toast('Karte gespeichert'); }
-      else close();
+      Object.assign(card, {deckId, front: f.front.value.trim(), back: f.back.value.trim(), source: f.source.value.trim(), note: f.note.value.trim(), img: draft.img, imgFront: draft.imgFront, audio: draft.audio});
+      if (cardBytes(card) > MAX_CARD_BYTES) return toast('Karte zu groß – bitte kürzeres Memo oder kleineres Foto verwenden', 3500);
+      const btn = $('button.primary', f); btn.disabled = true;
+      try { await S.store.putCard(card); } catch (err) { btn.disabled = false; return toast('Speichern fehlgeschlagen: ' + (err.code || err.message)); }
+      btn.disabled = false; render(); after?.();
+      if (!c && f.more?.checked) {
+        ['front','back','note','source'].forEach(k => f[k].value = ''); draft.img = ''; draft.audio = ''; draft.imgFront = false; drawImg(); drawAudio();
+        f.front.focus(); toast('Karte gespeichert');
+      } else close();
     };
-  });
+  }, () => { if (rec) rec.stop(); });
 }
 
 function bulkDialog(d){
@@ -450,16 +726,74 @@ function bulkDialog(d){
     });
 }
 
-async function addStarter(){
-  const now = Date.now(); let added = 0;
-  for (const [di, sd] of STARTER.entries()) {
-    if (!S.store.decks.has(sd.id)) await S.store.putDeck({id: sd.id, name: sd.name, created: now + di});
-    const list = sd.cards.map(([front, back, source], i) => ({id: `${sd.id}-${i+1}`, deckId: sd.id, front, back, source, box:1, due:0, created: now + i}))
-      .filter(c => !S.store.cards.has(c.id));
-    added += list.length;
-    if (list.length) await S.store.putCards(list);
-  }
-  render(); toast(added ? `${added} Karten übernommen` : 'Startstapel ist schon vollständig');
+// ================== Teilen mit der Klasse ==================
+const stripMedia = c => ({front: c.front, back: c.back, source: c.source || '', note: c.note || ''});
+async function shareDeck(d){
+  const cs = cardsOf(d.id);
+  if (!cs.length) return toast('Der Stapel ist leer');
+  const name = S.store.meta.shareName || (S.user?.email || '').split('@')[0];
+  modal(`<h2>${d.sharedId ? 'Geteilten Stapel aktualisieren' : 'Mit der Klasse teilen'}</h2>
+    <p class="sub">Alle angemeldeten Nutzer der App sehen „${esc(d.name)}“ (${cs.length} Karten) und können ihn übernehmen. Fotos und Sprachmemos werden nicht geteilt, nur Texte. Dein Lernfortschritt bleibt privat.</p>
+    <label class="f">Angezeigt als</label><input class="input" data-n maxlength="30" value="${esc(name)}">
+    <div class="actions"><button class="btn ghost" data-x>Abbrechen</button><button class="btn primary" data-ok>Teilen</button></div>`,
+    (el, close) => {
+      $('[data-x]', el).onclick = close;
+      $('[data-ok]', el).onclick = async () => {
+        const by = $('[data-n]', el).value.trim() || 'Anonym';
+        const id = d.sharedId || `${S.user.uid}_${d.id}`;
+        const data = {owner: S.user.uid, by, name: d.name, folder: d.folder || '', count: cs.length, updated: Date.now(), cards: cs.map(stripMedia)};
+        if (JSON.stringify(data).length > 950000) return toast('Stapel ist zu groß zum Teilen – bitte aufteilen');
+        try {
+          await S.store.putShared(id, data);
+          await S.store.putMeta({shareName: by});
+          await S.store.putDeck({...d, sharedId: id});
+          close(); render(); toast('Stapel geteilt ✓');
+        } catch (e) { toast('Teilen fehlgeschlagen: ' + (e.code || e.message), 3500); }
+      };
+    });
+}
+async function unshareDeck(d){
+  if (!await confirmBox('Teilen beenden?', 'Der Stapel ist dann nicht mehr für andere sichtbar. Wer ihn schon übernommen hat, behält seine Kopie.', 'Beenden')) return;
+  try { await S.store.delShared(d.sharedId); const nd = {...d}; delete nd.sharedId; await S.store.putDeck(nd); render(); toast('Teilen beendet'); }
+  catch (e) { toast('Fehler: ' + (e.code || e.message)); }
+}
+
+async function renderShared(){
+  app.innerHTML = `<div class="wrap">
+    <header class="top"><button class="iconbtn" data-act="back" aria-label="Zurück">${ICON.back}</button><h1>Aus der Klasse</h1></header>
+    <p class="sub" style="margin-top:-10px">Stapel, die andere Nutzer geteilt haben. Übernehmen erstellt eine eigene Kopie mit eigenem Lernfortschritt.</p>
+    <div data-list><p class="sub" style="text-align:center;margin-top:30px">Lädt …</p></div>
+  </div>`;
+  app.onclick = async e => {
+    if (e.target.closest('[data-act="back"]')) { S.view = 'home'; return render(); }
+    const imp = e.target.closest('[data-import]');
+    if (imp) { imp.disabled = true; await importShared(imp.dataset.import); if (S.view === 'shared') renderShared(); }
+  };
+  let list;
+  try { list = await S.store.listShared(); }
+  catch (e) { $('[data-list]').innerHTML = `<div class="card empty"><h3>Konnte nicht geladen werden</h3><p>${esc(e.code || e.message)}</p></div>`; return; }
+  if (S.view !== 'shared') return;
+  const mine = new Map(decks().filter(d => d.sharedFrom).map(d => [d.sharedFrom, d]));
+  $('[data-list]').innerHTML = list.length ? list.map(s => {
+    const own = s.owner === S.user.uid, have = mine.get(s.id);
+    return `<div class="card shared-item">
+      <div style="flex:1;min-width:0"><div class="name" style="font-weight:600">${esc(s.name)}</div>
+      <div class="sub">${s.folder ? esc(s.folder) + ' · ' : ''}${s.count} Karten · von ${esc(s.by)}${own ? ' (du)' : ''} · ${new Date(s.updated).toLocaleDateString('de-DE')}</div></div>
+      ${own ? '<span class="pill zero">Dein Stapel</span>' : `<button class="btn small ${have ? 'ghost' : 'primary'}" data-import="${esc(s.id)}">${have ? 'Aktualisieren' : 'Übernehmen'}</button>`}
+    </div>`; }).join('')
+    : `<div class="card empty"><h3>Noch nichts geteilt</h3><p>Teile einen eigenen Stapel über „…“ → „Mit der Klasse teilen“.</p></div>`;
+}
+async function importShared(id){
+  try {
+    const s = await S.store.getShared(id); if (!s) return toast('Stapel nicht mehr vorhanden');
+    let deck = decks().find(d => d.sharedFrom === id);
+    const now = Date.now();
+    if (!deck) { deck = {id: uid(), name: s.name, folder: s.folder || '', created: now, sharedFrom: id}; await S.store.putDeck(deck); }
+    const have = new Set(cardsOf(deck.id).map(c => norm(c.front)));
+    const neu = s.cards.filter(c => !have.has(norm(c.front))).map((c, i) => ({...c, id: uid() + i, deckId: deck.id, box: 1, due: 0, created: now + i}));
+    if (neu.length) await S.store.putCards(neu);
+    toast(neu.length ? `${neu.length} Karten übernommen ✓` : 'Schon aktuell ✓');
+  } catch (e) { toast('Fehler: ' + (e.code || e.message), 3500); }
 }
 
 // ================== Lernen (Leitner-System) ==================
@@ -468,17 +802,18 @@ function startLearn(deckId, free){
   if (!free) list = list.filter(isDue);
   list = list.sort(() => Math.random() - .5).sort((a,b) => (a.box||1) - (b.box||1));
   if (!list.length) return toast('Keine Karten fällig 🎉');
-  S.session = {deckId, free, queue: list.map(c => c.id), total: list.length, done: 0, right: 0, wrong: 0, flipped: false, seenWrong: new Set()};
+  S.session = {deckId, free, queue: list.map(c => c.id), total: list.length, done: 0, right: 0, wrong: 0, flipped: false, seenWrong: new Set(), typed: ''};
   S.view = 'learn'; renderLearn();
 }
 
 function renderLearn(){
   const s = S.session;
   if (!s.queue.length) {
+    const st = statsNow();
     app.innerHTML = `<div class="wrap"><div class="card done">
       <div class="big">${s.wrong === 0 ? '🏆' : '✅'}</div>
       <h2 style="margin:0 0 6px">Runde geschafft</h2>
-      <p class="sub">${s.right} gewusst · ${s.wrong} nicht gewusst</p>
+      <p class="sub">${s.right} gewusst · ${s.wrong} nicht gewusst${st.streak ? ` · 🔥 ${st.streak} ${st.streak === 1 ? 'Tag' : 'Tage'} Serie` : ''}</p>
       <button class="btn primary block" style="margin-top:20px" data-act="end">Fertig</button>
     </div></div>`;
     app.onclick = e => { if (e.target.closest('[data-act="end"]')) endLearn(); };
@@ -487,22 +822,35 @@ function renderLearn(){
   const c = S.store.cards.get(s.queue[0]);
   if (!c) { s.queue.shift(); return renderLearn(); }
   const deck = S.store.decks.get(c.deckId);
+  const typing = prefs.get('typing', false), dir = prefs.get('dir', 'normal');
+  const rev = dir === 'reverse' || (dir === 'mixed' && (c.id.charCodeAt(c.id.length-1) + s.done) % 2 === 1);
+  const q = rev ? c.back : c.front, a = rev ? c.front : c.back;
+  const imgFront = c.img && c.imgFront && !rev;
   app.innerHTML = `<div class="wrap">
     <div class="learn-top">
       <button class="iconbtn" data-act="end" aria-label="Beenden">${ICON.close}</button>
       <div class="progress"><span style="width:${s.done / s.total * 100}%"></span></div>
       <span class="sub">${s.done}/${s.total}</span>
     </div>
-    <div class="scene"><div class="flip card ${s.flipped ? 'on' : ''}" data-act="flip" style="box-shadow:none;border:0;background:none">
-      <div class="face card front">
-        <div class="tag">${esc(deck?.name || '')} · Fach ${c.box||1}</div>
-        <div class="front-text">${fmt(c.front)}</div>
-        <div class="hint">Tippen zum Umdrehen</div>
+    <div class="toggles">
+      <button class="chip ${typing ? 'on' : ''}" data-act="t-typing">✍️ Eintippen</button>
+      <button class="chip ${dir !== 'normal' ? 'on' : ''}" data-act="t-dir">🔄 ${dir === 'normal' ? 'Begriff → Definition' : dir === 'reverse' ? 'Definition → Begriff' : 'Gemischt'}</button>
+    </div>
+    <div class="scene"><div class="flip ${s.flipped ? 'on' : ''}">
+      <div class="face card front" data-act="${typing ? '' : 'flip'}">
+        <div class="tag"><span>${esc(deck?.name || '')}</span><span class="sp"></span><span>Fach ${c.box||1}</span></div>
+        <div class="front-text ${rev && q.length > 80 ? 'long' : ''}">${imgFront ? `<img src="${c.img}" alt="">` : ''}${fmt(q)}</div>
+        ${typing ? `<textarea data-typed placeholder="${rev ? 'Begriff' : 'Definition'} aus dem Kopf aufschreiben …">${esc(s.typed)}</textarea>
+          <button class="btn primary block" style="margin-top:10px" data-act="flip">Aufdecken</button>`
+        : `<div class="hint">Tippen zum Umdrehen</div>`}
       </div>
-      <div class="face card back">
-        <div class="tag">${esc(c.front)}</div>
-        <div class="back-text">${fmt(c.back)}</div>
-        ${c.source ? `<div class="src">${esc(c.source)}</div>` : ''}
+      <div class="face card back" data-act="flip">
+        <div class="tag"><span>${esc(rev ? 'Definition' : c.front)}</span><span class="sp"></span><button class="iconbtn" style="width:32px;height:32px" data-act="edit" aria-label="Karte bearbeiten">${ICON.edit}</button></div>
+        ${s.typed.trim() ? `<div class="mine"><b class="h">Deine Antwort</b>${esc(s.typed)}</div>` : ''}
+        <div class="back-text">${c.img && !imgFront ? `<img class="back-img" src="${c.img}" alt="">` : ''}${fmt(a)}</div>
+        ${c.note ? `<div class="note"><b class="h">📝 Merkhilfe</b>${fmt(c.note)}</div>` : ''}
+        ${c.audio ? `<audio controls src="${c.audio}"></audio>` : ''}
+        ${c.source ? `<div class="src"><span>${esc(c.source)}</span></div>` : ''}
       </div>
     </div></div>
     <div class="answer" style="visibility:${s.flipped ? 'visible' : 'hidden'}">
@@ -510,88 +858,134 @@ function renderLearn(){
       <button class="btn good" data-act="right">Gewusst</button>
     </div>
   </div>`;
+  const ta = $('[data-typed]'); if (ta) { ta.oninput = () => s.typed = ta.value; if (!s.flipped) setTimeout(() => ta.focus(), 50); }
   app.onclick = e => {
+    if (e.target.closest('audio, textarea')) return;
     const act = e.target.closest('[data-act]')?.dataset.act;
-    if (act === 'flip') { s.flipped = !s.flipped; $('.flip').classList.toggle('on', s.flipped); $('.answer').style.visibility = s.flipped ? 'visible' : 'hidden'; }
+    if (act === 'edit') { e.stopPropagation(); return cardDialog(c, () => { if (S.view === 'learn') renderLearn(); }); }
+    if (act === 'flip') {
+      s.flipped = !s.flipped;
+      const back = $('.face.back'); let mine = $('.mine', back);
+      if (s.typed.trim()) { if (!mine) { mine = document.createElement('div'); mine.className = 'mine'; $('.tag', back).after(mine); } mine.innerHTML = `<b class="h">Deine Antwort</b>${esc(s.typed)}`; }
+      else mine?.remove();
+      $('.flip').classList.toggle('on', s.flipped); $('.answer').style.visibility = s.flipped ? 'visible' : 'hidden';
+    }
+    if (act === 't-typing') { prefs.set('typing', !typing); renderLearn(); }
+    if (act === 't-dir') { prefs.set('dir', {normal:'reverse', reverse:'mixed', mixed:'normal'}[dir]); s.flipped = false; renderLearn(); }
     if (act === 'end') endLearn();
     if (act === 'right' || act === 'wrong') answer(c, act === 'right');
   };
 }
 
 async function answer(c, ok){
-  const s = S.session; s.queue.shift(); s.flipped = false;
+  const s = S.session; s.queue.shift(); s.flipped = false; s.typed = '';
+  const fresh = S.store.cards.get(c.id) || c;
   if (ok) {
     s.right++; s.done++;
     if (!s.seenWrong.has(c.id)) {
-      const box = Math.min(5, (c.box||1) + 1);
-      await S.store.putCard({...c, box, due: Date.now() + INTERVALS[box-1] * DAY - 3600000, last: Date.now()});
+      const box = Math.min(5, (fresh.box||1) + 1);
+      S.store.putCard({...fresh, box, due: Date.now() + INTERVALS[box-1] * DAY - 3600000, last: Date.now()}).catch(() => toast('Speichern fehlgeschlagen'));
     }
   } else {
     s.wrong++;
-    if (!s.seenWrong.has(c.id)) { s.seenWrong.add(c.id); await S.store.putCard({...c, box:1, due:0, last: Date.now()}); }
+    if (!s.seenWrong.has(c.id)) { s.seenWrong.add(c.id); S.store.putCard({...fresh, box:1, due:0, last: Date.now()}).catch(() => toast('Speichern fehlgeschlagen')); }
     s.queue.splice(Math.min(s.queue.length, 4), 0, c.id); // kommt in dieser Runde noch einmal
     s.total++; s.done++;
   }
+  countReview();
   renderLearn();
 }
 function endLearn(){ S.session = null; S.view = S.store.decks.has(S.deckId) && S.deckId ? 'deck' : 'home'; render(); }
 document.addEventListener('keydown', e => {
   if (S.view !== 'learn' || !S.session?.queue.length || document.querySelector('.modal-bg')) return;
-  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); $('[data-act="flip"]')?.click(); }
+  if (e.target.matches('textarea, input')) { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); $('.front [data-act="flip"]')?.click(); } return; }
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); (S.session.flipped ? $('.back') : ($('.front [data-act="flip"]') || $('.front')))?.click(); }
   if (S.session.flipped && (e.key === 'ArrowRight' || e.key === '2')) $('[data-act="right"]')?.click();
   if (S.session.flipped && (e.key === 'ArrowLeft' || e.key === '1')) $('[data-act="wrong"]')?.click();
 });
 
 // ================== Einstellungen ==================
 function renderSettings(){
-  const theme = storage.get('kk-theme') || 'auto';
+  const theme = storage.get('kk-theme') || 'auto', cloud = S.store.mode === 'cloud';
   app.innerHTML = `<div class="wrap">
     <header class="top"><button class="iconbtn" data-act="back" aria-label="Zurück">${ICON.back}</button><h1>Einstellungen</h1></header>
     <div class="card">
       <div class="settings-item"><div class="t">Konto</div>
-        ${S.store.mode === 'cloud'
+        ${cloud
           ? `<div class="d">Angemeldet als ${esc(S.user.email)}. Deine Karten werden zwischen allen Geräten synchronisiert.</div><button class="btn ghost" data-act="logout">Abmelden</button>`
-          : `<div class="d">Lokaler Modus: Die Karten sind nur auf diesem Gerät gespeichert. Konten und Synchronisierung werden aktiv, sobald die App mit Firebase verbunden ist.</div>`}
+          : `<div class="d">Lokaler Modus: Die Karten sind nur auf diesem Gerät gespeichert.</div>`}
       </div>
       <div class="settings-item"><div class="t">Darstellung</div><div class="d">Hell, dunkel oder wie das Gerät.</div>
         <div class="seg">${[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(([k,l]) => `<button data-theme="${k}" class="${theme===k?'on':''}">${l}</button>`).join('')}</div>
       </div>
-      ${STARTER.length ? '' : '<!--'}<div class="settings-item"><div class="t">Startstapel HSPV</div><div class="d">Karten aus den Strafrecht-AT-Skripten (Kausalität, Notwehr) hinzufügen. Vorhandene Karten bleiben unverändert.</div>
-        <button class="btn ghost" data-act="starter">Startstapel übernehmen</button></div>${STARTER.length ? '' : '-->'}
-      <div class="settings-item"><div class="t">Sichern & Übertragen</div><div class="d">Alle Stapel als Datei sichern oder eine Sicherung einlesen.</div>
+      <div class="settings-item"><div class="t">Abfragerichtung</div><div class="d">Was beim Lernen vorne steht.</div>
+        <div class="seg">${[['normal','Begriff → Definition'],['reverse','Definition → Begriff'],['mixed','Gemischt']].map(([k,l]) => `<button data-dir="${k}" class="${prefs.get('dir','normal')===k?'on':''}">${l}</button>`).join('')}</div>
+      </div>
+      <div class="settings-item"><div class="t">Sichern & Übertragen</div><div class="d">Alle Stapel als Datei sichern oder eine Stapel-Datei einlesen.</div>
         <div class="row"><button class="btn ghost" data-act="export">Exportieren</button><button class="btn ghost" data-act="import">Importieren</button></div>
         <input type="file" accept=".json,application/json" hidden data-file></div>
       <div class="settings-item"><div class="t">So funktioniert das Lernsystem</div>
-        <div class="d" style="margin:2px 0 0">Neue Karten starten in Fach 1. „Gewusst“ schiebt eine Karte ein Fach weiter, „Nicht gewusst“ zurück in Fach 1. Fällig wird eine Karte nach: Fach 1 sofort · Fach 2 nach 1 Tag · Fach 3 nach 3 Tagen · Fach 4 nach 7 Tagen · Fach 5 nach 16 Tagen.</div></div>
+        <div class="d" style="margin:2px 0 0">Neue Karten starten in Fach 1. „Gewusst“ schiebt eine Karte ein Fach weiter, „Nicht gewusst“ zurück in Fach 1. Fällig wird eine Karte nach: Fach 1 sofort · Fach 2 nach 1 Tag · Fach 3 nach 3 Tagen · Fach 4 nach 7 Tagen · Fach 5 nach 16 Tagen.<br><br>Tastatur: Leertaste = umdrehen, ← = nicht gewusst, → = gewusst.</div></div>
+      <div class="settings-item"><div class="t">Datenschutz</div><div class="d">Welche Daten gespeichert werden und wo.</div>
+        <button class="btn ghost" data-act="privacy">Datenschutzhinweis</button></div>
+      ${cloud ? `<div class="settings-item"><div class="t">Konto löschen</div><div class="d">Löscht dein Konto, alle Karten, Statistiken und deine geteilten Stapel endgültig.</div>
+        <button class="btn danger" data-act="delete-account">Konto löschen</button></div>` : ''}
     </div>
+    <p class="sub" style="text-align:center;margin-top:18px">Karteikarten HSPV · Version ${APP_VERSION}</p>
   </div>`;
   app.onclick = async e => {
     const th = e.target.closest('[data-theme]')?.dataset.theme;
     if (th) { storage.set('kk-theme', th); applyTheme(); return renderSettings(); }
+    const dr = e.target.closest('[data-dir]')?.dataset.dir;
+    if (dr) { prefs.set('dir', dr); return renderSettings(); }
     const act = e.target.closest('[data-act]')?.dataset.act;
     if (act === 'back') { S.view = 'home'; render(); }
-    if (act === 'starter') { await addStarter(); S.view = 'home'; render(); }
     if (act === 'logout') { S.store.stop?.(); await S.fb.signOut(S.fb.auth); }
-    if (act === 'export') exportData();
+    if (act === 'export') exportData(decks());
     if (act === 'import') $('[data-file]').click();
+    if (act === 'privacy') privacyDialog();
+    if (act === 'delete-account') deleteAccount();
   };
   $('[data-file]').onchange = e => importData(e.target.files[0]);
 }
 
-function exportData(){
-  const json = JSON.stringify({app:'karteikarten-hspv', version:1, exported:new Date().toISOString(), decks: decks(), cards: allCards()}, null, 1);
+function privacyDialog(){
+  modal(`<h2>Datenschutzhinweis</h2>
+    <p class="sub">Diese App ist ein privates, nicht-kommerzielles Lernprojekt für Studierende der HSPV.</p>
+    <p><b>Was gespeichert wird:</b> Deine E-Mail-Adresse und ein verschlüsseltes Passwort (für die Anmeldung), deine Stapel und Karten inklusive Fotos und Sprachmemos, dein Lernfortschritt und deine Lernstatistik.</p>
+    <p><b>Wo:</b> Bei Google Firebase (Google Ireland Ltd.), Datenbank-Standort Frankfurt am Main. Die App-Dateien liegen bei GitHub Pages.</p>
+    <p><b>Wer es sehen kann:</b> Nur du. Ausnahme: Stapel, die du ausdrücklich „mit der Klasse teilst“ – deren Texte und der von dir gewählte Anzeigename sind für alle angemeldeten Nutzer sichtbar.</p>
+    <p><b>Keine Werbung, kein Tracking, keine Weitergabe.</b> Für die Texterkennung aus Fotos wird bei Bedarf eine Programmbibliothek von jsDelivr geladen; das Foto selbst wird nur auf deinem Gerät verarbeitet.</p>
+    <p><b>Löschen:</b> Unter Einstellungen → „Konto löschen“ werden alle deine Daten entfernt.</p>
+    <div class="actions"><button class="btn primary" data-x>Verstanden</button></div>`,
+    (el, close) => { $('[data-x]', el).onclick = close; });
+}
+
+async function deleteAccount(){
+  if (!await confirmBox('Konto wirklich löschen?', 'Alle Stapel, Karten, Statistiken und geteilten Stapel werden endgültig gelöscht. Das kann nicht rückgängig gemacht werden.', 'Endgültig löschen')) return;
+  try {
+    toast('Daten werden gelöscht …', 5000);
+    S.store.stop?.();
+    await S.store.wipe();
+    await S.fb.deleteUser(S.fb.auth.currentUser);
+    toast('Konto gelöscht');
+  } catch (e) {
+    if (e.code === 'auth/requires-recent-login') { toast('Bitte ab- und wieder anmelden und dann erneut löschen.', 4500); await S.fb.signOut(S.fb.auth); }
+    else toast('Fehler: ' + (e.code || e.message), 4000);
+  }
+}
+
+function exportData(list){
+  const ids = new Set(list.map(d => d.id));
+  const json = JSON.stringify({app:'karteikarten-hspv', version:2, exported:new Date().toISOString(), decks: list, cards: allCards().filter(c => ids.has(c.deckId))}, null, 1);
+  const name = list.length === 1 ? list[0].name.replace(/[^\wäöüÄÖÜß-]+/g, '-').slice(0, 40) : 'alle-stapel';
   try {
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([json], {type:'application/json'}));
-    a.download = `karteikarten-${new Date().toISOString().slice(0,10)}.json`;
+    a.download = `karteikarten-${name}-${new Date().toISOString().slice(0,10)}.json`;
     document.body.appendChild(a); a.click(); a.remove();
-  } catch {}
-  modal(`<h2>Export</h2><p class="sub">Falls kein Download gestartet ist, kannst du die Daten kopieren und als .json-Datei speichern.</p>
-    <div class="actions"><button class="btn ghost" data-x>Schließen</button><button class="btn primary" data-copy>Kopieren</button></div>`,
-    (el, close) => {
-      $('[data-x]', el).onclick = close;
-      $('[data-copy]', el).onclick = async () => { try { await navigator.clipboard.writeText(json); toast('Kopiert'); close(); } catch { toast('Kopieren nicht möglich'); } };
-    });
+    toast('Export gestartet');
+  } catch { toast('Export nicht möglich'); }
 }
 
 async function importData(file){
@@ -599,7 +993,7 @@ async function importData(file){
   try {
     const d = JSON.parse(await file.text());
     if (!Array.isArray(d.decks) || !Array.isArray(d.cards)) throw 0;
-    for (const deck of d.decks) await S.store.putDeck(deck);
+    await S.store.putDecks(d.decks);
     await S.store.putCards(d.cards);
     toast(`${d.decks.length} Stapel, ${d.cards.length} Karten importiert`); S.view = 'home'; render();
   } catch { toast('Datei konnte nicht gelesen werden'); }
@@ -615,14 +1009,16 @@ function renderAuth(mode='login', err=''){
     <form>
       <label class="f">E-Mail</label><input class="input" type="email" name="email" autocomplete="email" required>
       <label class="f">Passwort</label><input class="input" type="password" name="pw" autocomplete="${reg ? 'new-password' : 'current-password'}" minlength="6" required>
+      ${reg ? '<label class="chk"><input type="checkbox" name="ok" required> Ich habe den <button type="button" class="link" data-privacy>Datenschutzhinweis</button> gelesen.</label>' : ''}
       <div class="err">${esc(err)}</div>
       <button class="btn primary block">${reg ? 'Registrieren' : 'Anmelden'}</button>
     </form>
     <p class="sub" style="text-align:center;margin:18px 0 0">${reg ? 'Schon ein Konto?' : 'Noch kein Konto?'} <button class="link" data-switch>${reg ? 'Anmelden' : 'Registrieren'}</button></p>
-    ${reg ? '' : '<p class="sub" style="text-align:center;margin:8px 0 0"><button class="link" data-reset>Passwort vergessen?</button></p>'}
+    ${reg ? '' : '<p class="sub" style="text-align:center;margin:8px 0 0"><button class="link" data-reset>Passwort vergessen?</button> · <button class="link" data-privacy>Datenschutz</button></p>'}
   </div>`;
   const f = $('form');
   $('[data-switch]').onclick = () => renderAuth(reg ? 'login' : 'register');
+  $$('[data-privacy]').forEach(b => b.onclick = privacyDialog);
   $('[data-reset]')?.addEventListener('click', async () => {
     if (!f.email.value) return renderAuth('login', 'Bitte zuerst die E-Mail-Adresse eingeben.');
     try { await S.fb.sendPasswordResetEmail(S.fb.auth, f.email.value); toast('E-Mail zum Zurücksetzen gesendet'); }
@@ -654,7 +1050,12 @@ async function boot(){
   }
   app.innerHTML = '<div class="wrap"><p class="sub" style="text-align:center;margin-top:30vh">Lädt …</p></div>';
   const V = '10.12.2', base = `https://www.gstatic.com/firebasejs/${V}`;
-  const [A, U, F] = await Promise.all([import(`${base}/firebase-app.js`), import(`${base}/firebase-auth.js`), import(`${base}/firebase-firestore.js`)]);
+  let A, U, F;
+  try { [A, U, F] = await Promise.all([import(`${base}/firebase-app.js`), import(`${base}/firebase-auth.js`), import(`${base}/firebase-firestore.js`)]); }
+  catch {
+    app.innerHTML = '<div class="wrap"><div class="card empty" style="margin-top:20vh"><h3>Keine Verbindung</h3><p>Beim ersten Start braucht die App Internet. Danach funktioniert sie auch offline.</p><button class="btn primary" onclick="location.reload()">Erneut versuchen</button></div></div>';
+    return;
+  }
   const fbApp = A.initializeApp(cfg);
   let db;
   try { db = F.initializeFirestore(fbApp, {localCache: F.persistentLocalCache({tabManager: F.persistentMultipleTabManager()})}); }
@@ -662,6 +1063,7 @@ async function boot(){
   S.fb = {...U, ...F, auth: U.getAuth(fbApp), db};
   U.onAuthStateChanged(S.fb.auth, async user => {
     S.store?.stop?.(); S.user = user; S.view = 'home'; S.session = null;
+    $$('.modal-bg').forEach(m => m.remove());
     if (!user) return renderAuth();
     S.store = new FirebaseStore(S.fb, user);
     app.innerHTML = '<div class="wrap"><p class="sub" style="text-align:center;margin-top:30vh">Karten werden geladen …</p></div>';
