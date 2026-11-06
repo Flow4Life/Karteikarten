@@ -172,7 +172,7 @@ textarea.input.short{min-height:70px}
 
 <script type="module">
 // ================== Konstanten & Hilfsfunktionen ==================
-const APP_VERSION = '2.0';
+const APP_VERSION = '2.1';
 const DAY = 86400000;
 const INTERVALS = [0, 1, 3, 7, 16]; // Tage bis zur nächsten Abfrage je Fach 1–5
 const BOX_COLORS = ['var(--b1)','var(--b2)','var(--b3)','var(--b4)','var(--b5)'];
@@ -243,8 +243,8 @@ class FirebaseStore {
     let pending = 2; const first = {decks:true, cards:true};
     const hit = k => { if (first[k]) { first[k] = false; if (--pending === 0) onData(); } else if (!pending) onData(); };
     this.unsub = [
-      this.fb.onSnapshot(this.col('decks'), snap => { this.decks = new Map(snap.docs.map(d => [d.id, d.data()])); hit('decks'); }, e => toast('Sync-Fehler: ' + e.code)),
-      this.fb.onSnapshot(this.col('cards'), snap => { this.cards = new Map(snap.docs.map(d => [d.id, d.data()])); hit('cards'); }, e => toast('Sync-Fehler: ' + e.code)),
+      this.fb.onSnapshot(this.col('decks'), snap => { this.decks = new Map(snap.docs.map(d => [d.id, d.data()])); hit('decks'); }, e => { toast('Sync-Fehler: ' + e.code); hit('decks'); }),
+      this.fb.onSnapshot(this.col('cards'), snap => { this.cards = new Map(snap.docs.map(d => [d.id, d.data()])); hit('cards'); }, e => { toast('Sync-Fehler: ' + e.code); hit('cards'); }),
     ];
   }
   stop(){ (this.unsub || []).forEach(u => u()); }
@@ -298,6 +298,34 @@ class FirebaseStore {
 const S = { store:null, view:'home', deckId:null, session:null, query:'', fb:null, user:null };
 const app = $('#app');
 
+// ---------- Navigation mit Browser-Historie (Zurück-Taste / Wischgeste) ----------
+const modalStack = []; let skipPop = 0, pendingBack = null;
+function navTo(view, extra={}){
+  Object.assign(S, extra); S.view = view;
+  const st = {kk: true, view, deckId: S.deckId};
+  try {
+    // Kommt die Navigation direkt aus einem gerade geschlossenen Dialog, dessen Historien-Eintrag wiederverwenden
+    if (pendingBack) { clearTimeout(pendingBack); pendingBack = null; history.replaceState(st, ''); }
+    else history.pushState(st, '');
+  } catch {}
+  if (view === 'learn') renderLearn(); else render();
+}
+function navBack(){
+  if (history.state?.kk && history.state.view !== 'home') history.back();
+  else navHome();
+}
+function navHome(){ S.view = 'home'; S.session = null; S.query = ''; try { history.replaceState({kk: true, view: 'home'}, ''); } catch {} render(); }
+addEventListener('popstate', e => {
+  if (skipPop) { skipPop--; return; }
+  if (modalStack.length) { modalStack.pop()(true); return; } // offenen Dialog schließen
+  const st = e.state;
+  if (!st?.kk) { try { history.replaceState({kk: true, view: 'home'}, ''); } catch {} S.view = 'home'; S.session = null; return render(); }
+  if (S.view === 'learn' && st.view !== 'learn') S.session = null;
+  S.view = st.view; S.deckId = st.deckId ?? S.deckId;
+  if (S.view === 'learn' && !S.session) S.view = S.deckId && S.store.decks.has(S.deckId) ? 'deck' : 'home';
+  S.view === 'learn' ? renderLearn() : render();
+});
+
 function applyTheme(){
   const t = storage.get('kk-theme') || 'auto';
   const dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
@@ -316,8 +344,20 @@ function toast(msg, ms=2400){
 function modal(html, onMount, onClose){
   const bg = document.createElement('div'); bg.className = 'modal-bg';
   bg.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}</div>`;
-  const close = () => { bg.remove(); onClose?.(); };
+  let open = true;
+  const finish = () => { if (!open) return; open = false; bg.remove(); const i = modalStack.indexOf(close); if (i >= 0) modalStack.splice(i, 1); onClose?.(); };
+  // fromPop = durch Zurück-Taste geschlossen; sonst eigenen Historien-Eintrag (verzögert) entfernen
+  const close = fromPop => {
+    if (!open) return; finish();
+    if (fromPop !== true && history.state?.kkModal && !pendingBack) pendingBack = setTimeout(() => { pendingBack = null; skipPop++; history.back(); }, 0);
+  };
+  modalStack.push(close);
+  try {
+    if (pendingBack) { clearTimeout(pendingBack); pendingBack = null; } // direkt folgender Dialog nutzt denselben Eintrag
+    else history.pushState({...(history.state || {}), kkModal: true}, '');
+  } catch {}
   bg.addEventListener('click', e => { if (e.target === bg) close(); });
+  document.addEventListener('keydown', function esc(e){ if (!open) return document.removeEventListener('keydown', esc); if (e.key === 'Escape') close(); });
   document.body.appendChild(bg);
   onMount?.(bg, close);
   return close;
@@ -362,8 +402,9 @@ async function countReview(){
 
 // ================== Ansichten ==================
 function render(){
-  if (S.view === 'learn') return; // Lernsitzung nicht durch Sync-Updates unterbrechen
+  if (S.view === 'learn' && S.session) return; // Lernsitzung nicht durch Sync-Updates unterbrechen
   if (S.view === 'deck' && !S.store.decks.has(S.deckId)) S.view = 'home';
+  if (S.view === 'learn') S.view = 'home';
   ({home:renderHome, deck:renderDeck, settings:renderSettings, search:renderSearch, shared:renderShared})[S.view]();
 }
 
@@ -420,13 +461,13 @@ function renderHome(){
   const fi = $('[data-file]'); if (fi) fi.onchange = e => importData(e.target.files[0]);
   app.onclick = e => {
     const deck = e.target.closest('[data-deck]');
-    if (deck) { S.deckId = deck.dataset.deck; S.view = 'deck'; S.query = ''; return render(); }
+    if (deck) return navTo('deck', {deckId: deck.dataset.deck, query: ''});
     const fh = e.target.closest('[data-folder]');
     if (fh) { const f = fh.dataset.folder, c = prefs.get('closedFolders', []); prefs.set('closedFolders', c.includes(f) ? c.filter(x => x !== f) : [...c, f]); return render(); }
     const act = e.target.closest('[data-act]')?.dataset.act;
-    if (act === 'settings') { S.view = 'settings'; render(); }
-    if (act === 'search') { S.view = 'search'; S.query = ''; render(); }
-    if (act === 'shared') { S.view = 'shared'; render(); }
+    if (act === 'settings') navTo('settings');
+    if (act === 'search') navTo('search', {query: ''});
+    if (act === 'shared') navTo('shared');
     if (act === 'new-deck') deckDialog();
     if (act === 'import-file') $('[data-file]').click();
     if (act === 'learn-all') startLearn(null, false);
@@ -473,7 +514,7 @@ function renderDeck(){
     const card = e.target.closest('[data-card]');
     if (card) return cardDialog(S.store.cards.get(card.dataset.card));
     const act = e.target.closest('[data-act]')?.dataset.act;
-    if (act === 'back') { S.view = 'home'; render(); }
+    if (act === 'back') navBack();
     if (act === 'new-card') cardDialog(null);
     if (act === 'learn') startLearn(d.id, false);
     if (act === 'learn-free') startLearn(d.id, true);
@@ -503,7 +544,7 @@ function renderSearch(){
   app.onclick = e => {
     const card = e.target.closest('[data-card]');
     if (card) return cardDialog(S.store.cards.get(card.dataset.card), run);
-    if (e.target.closest('[data-act="back"]')) { S.view = 'home'; S.query = ''; render(); }
+    if (e.target.closest('[data-act="back"]')) navBack();
   };
 }
 
@@ -533,7 +574,7 @@ function deckMenu(d){
       }
       if (a === 'del' && await confirmBox('Stapel löschen?', `„${d.name}“ und alle ${cardsOf(d.id).length} Karten werden gelöscht.`)) {
         if (d.sharedId) { try { await S.store.delShared(d.sharedId); } catch {} }
-        await S.store.delDeck(d.id); S.view = 'home'; render(); toast('Stapel gelöscht');
+        await S.store.delDeck(d.id); navHome(); toast('Stapel gelöscht');
       }
     };
   });
@@ -560,8 +601,7 @@ function deckDialog(d){
         const folder = f.folder.value.trim();
         const deck = d ? {...d, name, folder} : {id: uid(), name, folder, created: Date.now()};
         await S.store.putDeck(deck); close();
-        if (!d) { S.deckId = deck.id; S.view = 'deck'; }
-        render();
+        if (!d) navTo('deck', {deckId: deck.id, query: ''}); else render();
       };
     });
 }
@@ -765,7 +805,7 @@ async function renderShared(){
     <div data-list><p class="sub" style="text-align:center;margin-top:30px">Lädt …</p></div>
   </div>`;
   app.onclick = async e => {
-    if (e.target.closest('[data-act="back"]')) { S.view = 'home'; return render(); }
+    if (e.target.closest('[data-act="back"]')) return navBack();
     const imp = e.target.closest('[data-import]');
     if (imp) { imp.disabled = true; await importShared(imp.dataset.import); if (S.view === 'shared') renderShared(); }
   };
@@ -803,7 +843,7 @@ function startLearn(deckId, free){
   list = list.sort(() => Math.random() - .5).sort((a,b) => (a.box||1) - (b.box||1));
   if (!list.length) return toast('Keine Karten fällig 🎉');
   S.session = {deckId, free, queue: list.map(c => c.id), total: list.length, done: 0, right: 0, wrong: 0, flipped: false, seenWrong: new Set(), typed: ''};
-  S.view = 'learn'; renderLearn();
+  navTo('learn');
 }
 
 function renderLearn(){
@@ -895,7 +935,7 @@ async function answer(c, ok){
   countReview();
   renderLearn();
 }
-function endLearn(){ S.session = null; S.view = S.store.decks.has(S.deckId) && S.deckId ? 'deck' : 'home'; render(); }
+function endLearn(){ if (history.state?.view === 'learn') history.back(); else { S.session = null; S.view = S.deckId && S.store.decks.has(S.deckId) ? 'deck' : 'home'; render(); } }
 document.addEventListener('keydown', e => {
   if (S.view !== 'learn' || !S.session?.queue.length || document.querySelector('.modal-bg')) return;
   if (e.target.matches('textarea, input')) { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); $('.front [data-act="flip"]')?.click(); } return; }
@@ -916,7 +956,7 @@ function renderSettings(){
           : `<div class="d">Lokaler Modus: Die Karten sind nur auf diesem Gerät gespeichert.</div>`}
       </div>
       <div class="settings-item"><div class="t">Darstellung</div><div class="d">Hell, dunkel oder wie das Gerät.</div>
-        <div class="seg">${[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(([k,l]) => `<button data-theme="${k}" class="${theme===k?'on':''}">${l}</button>`).join('')}</div>
+        <div class="seg">${[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(([k,l]) => `<button data-themeopt="${k}" class="${theme===k?'on':''}">${l}</button>`).join('')}</div>
       </div>
       <div class="settings-item"><div class="t">Abfragerichtung</div><div class="d">Was beim Lernen vorne steht.</div>
         <div class="seg">${[['normal','Begriff → Definition'],['reverse','Definition → Begriff'],['mixed','Gemischt']].map(([k,l]) => `<button data-dir="${k}" class="${prefs.get('dir','normal')===k?'on':''}">${l}</button>`).join('')}</div>
@@ -934,12 +974,12 @@ function renderSettings(){
     <p class="sub" style="text-align:center;margin-top:18px">Karteikarten HSPV · Version ${APP_VERSION}</p>
   </div>`;
   app.onclick = async e => {
-    const th = e.target.closest('[data-theme]')?.dataset.theme;
+    const th = e.target.closest('[data-themeopt]')?.dataset.themeopt;
     if (th) { storage.set('kk-theme', th); applyTheme(); return renderSettings(); }
     const dr = e.target.closest('[data-dir]')?.dataset.dir;
     if (dr) { prefs.set('dir', dr); return renderSettings(); }
     const act = e.target.closest('[data-act]')?.dataset.act;
-    if (act === 'back') { S.view = 'home'; render(); }
+    if (act === 'back') navBack();
     if (act === 'logout') { S.store.stop?.(); await S.fb.signOut(S.fb.auth); }
     if (act === 'export') exportData(decks());
     if (act === 'import') $('[data-file]').click();
@@ -995,7 +1035,7 @@ async function importData(file){
     if (!Array.isArray(d.decks) || !Array.isArray(d.cards)) throw 0;
     await S.store.putDecks(d.decks);
     await S.store.putCards(d.cards);
-    toast(`${d.decks.length} Stapel, ${d.cards.length} Karten importiert`); S.view = 'home'; render();
+    toast(`${d.decks.length} Stapel, ${d.cards.length} Karten importiert`); navHome();
   } catch { toast('Datei konnte nicht gelesen werden'); }
 }
 
@@ -1044,6 +1084,7 @@ function authError(e){
 
 // ================== Start ==================
 async function boot(){
+  try { history.replaceState({kk: true, view: 'home'}, ''); } catch {}
   const cfg = window.FIREBASE_CONFIG;
   if (!cfg || !cfg.apiKey) {
     S.store = new LocalStore(); await S.store.start(render); return;
@@ -1063,7 +1104,8 @@ async function boot(){
   S.fb = {...U, ...F, auth: U.getAuth(fbApp), db};
   U.onAuthStateChanged(S.fb.auth, async user => {
     S.store?.stop?.(); S.user = user; S.view = 'home'; S.session = null;
-    $$('.modal-bg').forEach(m => m.remove());
+    $$('.modal-bg').forEach(m => m.remove()); modalStack.length = 0;
+    try { history.replaceState({kk: true, view: 'home'}, ''); } catch {}
     if (!user) return renderAuth();
     S.store = new FirebaseStore(S.fb, user);
     app.innerHTML = '<div class="wrap"><p class="sub" style="text-align:center;margin-top:30vh">Karten werden geladen …</p></div>';
