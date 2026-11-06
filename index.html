@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Karteikarten HSPV</title>
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Karteikarten">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --surface-2:#eef0f4; --text:#0f172a; --muted:#64748b;
+  --line:#e2e5eb; --accent:#2f5bea; --accent-soft:#e6ecfd; --good:#16a34a; --good-soft:#dcfce7;
+  --bad:#dc2626; --bad-soft:#fee2e2; --shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06);
+  --r:16px;
+  --b1:#cbd5e1; --b2:#f59e0b; --b3:#eab308; --b4:#22c55e; --b5:#2f5bea;
+}
+[data-theme="dark"]{
+  --bg:#0b1020; --surface:#141a2e; --surface-2:#1c2440; --text:#e8ecf5; --muted:#8b95b0;
+  --line:#26304f; --accent:#6d8cff; --accent-soft:#1e2a52; --good:#4ade80; --good-soft:#123222;
+  --bad:#f87171; --bad-soft:#3a1717; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  --b5:#6d8cff; --b1:#3b4566;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5}
+body{min-height:100vh;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+button,input,textarea,select{font:inherit;color:inherit}
+.wrap{max-width:720px;margin:0 auto;padding:20px 18px 96px}
+header.top{display:flex;align-items:center;gap:12px;margin:8px 0 22px}
+header.top h1{font-size:24px;font-weight:700;margin:0;letter-spacing:-.02em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sub{color:var(--muted);font-size:14px}
+.iconbtn{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;flex:none}
+.iconbtn:hover{background:var(--surface-2)}
+.iconbtn svg{width:20px;height:20px}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:600;cursor:pointer;background:var(--surface-2);transition:transform .08s,filter .15s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.ghost{background:transparent;border:1px solid var(--line)}
+.btn.danger{background:var(--bad-soft);color:var(--bad)}
+.btn.block{width:100%}
+.btn:disabled{opacity:.5;cursor:default}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.hero{padding:22px;display:flex;gap:18px;align-items:center;margin-bottom:22px}
+.hero .big{font-size:40px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.hero .grow{flex:1}
+.section-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:26px 4px 10px}
+.deck{padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;margin-bottom:10px;transition:transform .1s}
+.deck:hover{transform:translateY(-1px)}
+.deck .name{font-weight:600}
+.deck .meta{font-size:13px;color:var(--muted)}
+.pill{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+.pill.zero{background:var(--surface-2);color:var(--muted)}
+.bar{display:flex;height:6px;border-radius:99px;overflow:hidden;background:var(--surface-2);margin-top:8px}
+.bar span{display:block;height:100%}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+.empty{padding:34px 22px;text-align:center;color:var(--muted)}
+.empty h3{color:var(--text);margin:0 0 6px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row > .btn{flex:1}
+.list-item{padding:14px 16px;border-bottom:1px solid var(--line);cursor:pointer;display:flex;gap:12px;align-items:flex-start}
+.list-item:last-child{border-bottom:0}
+.list-item .q{font-weight:600}
+.list-item .a{font-size:14px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dot{width:10px;height:10px;border-radius:50%;margin-top:7px;flex:none}
+.search{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);margin-bottom:12px}
+label.f{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:14px 0 6px}
+.input,textarea.input,select.input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);outline:none}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+textarea.input{min-height:120px;resize:vertical}
+
+/* Learn */
+.learn-top{display:flex;align-items:center;gap:12px;margin:8px 0 18px}
+.progress{flex:1;height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.progress span{display:block;height:100%;background:var(--accent);transition:width .3s}
+.scene{perspective:1400px;margin-bottom:18px}
+.flip{position:relative;min-height:min(62vh,520px);transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.2,1);cursor:pointer}
+.flip.on{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:26px 24px;display:flex;flex-direction:column;overflow:auto}
+.face.back{transform:rotateY(180deg)}
+.face .tag{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.face .front-text{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(22px,4.5vw,30px);font-weight:700;letter-spacing:-.02em;padding:18px 0}
+.face .back-text{flex:1;white-space:pre-wrap;font-size:17px;padding-top:14px}
+.face .src{font-size:13px;color:var(--muted);margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+.hint{text-align:center;color:var(--muted);font-size:14px}
+.answer{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.answer .btn{padding:16px}
+.btn.bad{background:var(--bad-soft);color:var(--bad)}
+.btn.good{background:var(--good-soft);color:var(--good)}
+.done{text-align:center;padding:40px 20px}
+.done .big{font-size:56px;margin-bottom:8px}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(2,6,23,.5);display:flex;align-items:flex-end;justify-content:center;z-index:50;animation:fade .15s}
+@media (min-width:640px){.modal-bg{align-items:center}}
+.modal{background:var(--surface);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom))}
+@media (min-width:640px){.modal{border-radius:20px}}
+.modal h2{margin:0 0 4px;font-size:20px}
+.modal .actions{display:flex;gap:10px;margin-top:20px}
+.modal .actions .btn{flex:1}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;font-weight:500;z-index:60;box-shadow:var(--shadow)}
+
+/* Auth */
+.auth{max-width:400px;margin:8vh auto 0;padding:28px 24px}
+.logo{width:56px;height:56px;border-radius:16px;background:var(--accent);display:grid;place-items:center;margin-bottom:16px}
+.logo svg{width:30px;height:30px;color:#fff}
+.err{color:var(--bad);font-size:14px;margin-top:10px;min-height:20px}
+.link{background:none;border:0;color:var(--accent);cursor:pointer;padding:0;font-weight:600}
+.banner{font-size:13px;padding:10px 14px;border-radius:12px;background:var(--accent-soft);color:var(--accent);margin-bottom:16px}
+.fab{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:calc(20px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:18px;background:var(--accent);color:#fff;border:0;display:grid;place-items:center;box-shadow:0 10px 30px rgba(47,91,234,.35);cursor:pointer;z-index:20}
+.fab svg{width:26px;height:26px}
+.settings-item{padding:16px 18px;border-bottom:1px solid var(--line)}
+.settings-item:last-child{border-bottom:0}
+.settings-item .t{font-weight:600}
+.settings-item .d{font-size:14px;color:var(--muted);margin:2px 0 10px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px}
+.seg button{border:0;background:none;padding:8px 14px;border-radius:9px;cursor:pointer;font-weight:500;font-size:14px}
+.seg button.on{background:var(--surface);box-shadow:var(--shadow)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="module">
+// ================== Startstapel (aus HSPV-Skripten, nur interner Gebrauch) ==================
+// Startstapel wird nicht öffentlich mitgeliefert (Skripte nur für internen Gebrauch) – Import über Datei.
+const STARTER = [];
+
+// ================== Hilfsfunktionen ==================
+const DAY = 86400000;
+const INTERVALS = [0, 1, 3, 7, 16]; // Tage bis zur nächsten Abfrage je Fach 1–5
+const BOX_COLORS = ['var(--b1)','var(--b2)','var(--b3)','var(--b4)','var(--b5)'];
+const $ = (s, el=document) => el.querySelector(s);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+const isDue = c => (c.due || 0) <= Date.now();
+const ICON = {
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  dots:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>',
+  close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+  cards:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="14" height="14" rx="2"/><path d="M7 2h12a2 2 0 0 1 2 2v12"/></svg>',
+};
+const storage = {
+  get(k){ try { return localStorage.getItem(k); } catch { return null; } },
+  set(k,v){ try { localStorage.setItem(k,v); } catch {} },
+};
+
+// ================== Datenspeicher ==================
+// Lokal (ohne Konto) oder Firebase (mit Konto, synchronisiert zwischen Geräten)
+class LocalStore {
+  constructor(){ this.key = 'kk-data-v1'; this.mode = 'local'; }
+  async start(onData){
+    let d = {decks:[], cards:[]};
+    try { d = JSON.parse(storage.get(this.key)) || d; } catch {}
+    this.decks = new Map(d.decks.map(x => [x.id, x]));
+    this.cards = new Map(d.cards.map(x => [x.id, x]));
+    this.onData = onData; onData();
+  }
+  save(){ storage.set(this.key, JSON.stringify({decks:[...this.decks.values()], cards:[...this.cards.values()]})); }
+  async putDeck(d){ this.decks.set(d.id, d); this.save(); }
+  async putCard(c){ this.cards.set(c.id, c); this.save(); }
+  async putCards(list){ list.forEach(c => this.cards.set(c.id, c)); this.save(); }
+  async delCard(id){ this.cards.delete(id); this.save(); }
+  async delDeck(id){ this.decks.delete(id); for (const [k,c] of this.cards) if (c.deckId === id) this.cards.delete(k); this.save(); }
+}
+
+class FirebaseStore {
+  constructor(fb, user){ this.fb = fb; this.user = user; this.mode = 'cloud'; this.decks = new Map(); this.cards = new Map(); }
+  col(name){ return this.fb.collection(this.fb.db, 'users', this.user.uid, name); }
+  ref(name, id){ return this.fb.doc(this.fb.db, 'users', this.user.uid, name, id); }
+  async start(onData){
+    this.onData = onData;
+    let ready = 0;
+    const done = () => { if (++ready >= 2) onData(); };
+    let first = {decks:true, cards:true};
+    this.unsub = [
+      this.fb.onSnapshot(this.col('decks'), snap => { this.decks = new Map(snap.docs.map(d => [d.id, d.data()])); first.decks ? (first.decks=false, done()) : onData(); }),
+      this.fb.onSnapshot(this.col('cards'), snap => { this.cards = new Map(snap.docs.map(d => [d.id, d.data()])); first.cards ? (first.cards=false, done()) : onData(); }),
+    ];
+  }
+  stop(){ (this.unsub || []).forEach(u => u()); }
+  async putDeck(d){ this.decks.set(d.id, d); await this.fb.setDoc(this.ref('decks', d.id), d); }
+  async putCard(c){ this.cards.set(c.id, c); await this.fb.setDoc(this.ref('cards', c.id), c); }
+  async putCards(list){
+    for (let i = 0; i < list.length; i += 400) {
+      const b = this.fb.writeBatch(this.fb.db);
+      list.slice(i, i+400).forEach(c => { this.cards.set(c.id, c); b.set(this.ref('cards', c.id), c); });
+      await b.commit();
+    }
+  }
+  async delCard(id){ this.cards.delete(id); await this.fb.deleteDoc(this.ref('cards', id)); }
+  async delDeck(id){
+    const ids = [...this.cards.values()].filter(c => c.deckId === id).map(c => c.id);
+    this.decks.delete(id); ids.forEach(i => this.cards.delete(i));
+    const b = this.fb.writeBatch(this.fb.db);
+    b.delete(this.ref('decks', id)); ids.slice(0, 450).forEach(i => b.delete(this.ref('cards', i)));
+    await b.commit();
+  }
+}
+
+// ================== Zustand ==================
+const S = { store:null, view:'home', deckId:null, session:null, query:'', fb:null, user:null };
+const app = $('#app');
+
+function applyTheme(){
+  const t = storage.get('kk-theme') || 'auto';
+  const dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  $('meta[name="theme-color"]').content = dark ? '#0b1020' : '#f5f6f8';
+}
+applyTheme();
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', applyTheme);
+
+function toast(msg){
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => t.remove(), 2200);
+}
+
+function modal(html, onMount){
+  const bg = document.createElement('div'); bg.className = 'modal-bg';
+  bg.innerHTML = `<div class="modal" role="dialog">${html}</div>`;
+  const close = () => bg.remove();
+  bg.addEventListener('click', e => { if (e.target === bg) close(); });
+  document.body.appendChild(bg);
+  onMount?.(bg, close);
+  return close;
+}
+
+function confirmBox(title, text, okLabel='Löschen'){
+  return new Promise(res => {
+    modal(`<h2>${esc(title)}</h2><p class="sub">${esc(text)}</p>
+      <div class="actions"><button class="btn ghost" data-x>Abbrechen</button><button class="btn danger" data-ok>${esc(okLabel)}</button></div>`,
+      (el, close) => {
+        $('[data-x]', el).onclick = () => { close(); res(false); };
+        $('[data-ok]', el).onclick = () => { close(); res(true); };
+      });
+  });
+}
+
+const decks = () => [...S.store.decks.values()].sort((a,b) => (a.created||0) - (b.created||0));
+const cardsOf = id => [...S.store.cards.values()].filter(c => c.deckId === id).sort((a,b) => (a.created||0) - (b.created||0));
+const allCards = () => [...S.store.cards.values()];
+
+function boxBar(list){
+  const n = list.length || 1, counts = [0,0,0,0,0];
+  list.forEach(c => counts[(c.box||1)-1]++);
+  return `<div class="bar">${counts.map((k,i) => k ? `<span style="width:${k/n*100}%;background:${BOX_COLORS[i]}"></span>` : '').join('')}</div>`;
+}
+
+// ================== Ansichten ==================
+function render(){
+  if (S.view === 'learn') return; // Lernsitzung nicht durch Sync-Updates unterbrechen
+  if (S.view === 'deck' && !S.store.decks.has(S.deckId)) S.view = 'home';
+  ({home:renderHome, deck:renderDeck, settings:renderSettings})[S.view]();
+}
+
+function renderHome(){
+  const all = allCards(), due = all.filter(isDue).length, sure = all.filter(c => (c.box||1) >= 4).length;
+  const ds = decks();
+  app.innerHTML = `<div class="wrap">
+    <header class="top"><h1>Karteikarten</h1>
+      <button class="iconbtn" data-act="settings" aria-label="Einstellungen">${ICON.gear}</button></header>
+    ${ds.length ? `
+    <div class="card hero">
+      <div class="grow">
+        <div class="big">${due}</div>
+        <div class="sub">${due === 1 ? 'Karte' : 'Karten'} heute fällig · ${sure} von ${all.length} sicher</div>
+        ${boxBar(all)}
+      </div>
+      <button class="btn primary" data-act="learn-all" ${due ? '' : 'disabled'}>Lernen</button>
+    </div>
+    <div class="section-title">Stapel</div>
+    ${ds.map(d => { const cs = cardsOf(d.id), du = cs.filter(isDue).length; return `
+      <div class="card deck" data-deck="${esc(d.id)}">
+        <div style="flex:1;min-width:0">
+          <div class="name">${esc(d.name)}</div>
+          <div class="meta">${cs.length} Karten</div>
+          ${boxBar(cs)}
+        </div>
+        <span class="pill ${du ? '' : 'zero'}">${du} fällig</span>
+      </div>`; }).join('')}
+    <div class="legend">${['Fach 1','Fach 2','Fach 3','Fach 4','Fach 5'].map((l,i) => `<span><i style="background:${BOX_COLORS[i]}"></i>${l}</span>`).join('')}</div>
+    ` : `
+    <div class="card empty">
+      <h3>Noch keine Karten</h3>
+      <p>Lege einen eigenen Stapel an oder importiere eine Stapel-Datei.</p>
+      <div class="row" style="margin-top:16px">
+        ${STARTER.length ? '<button class="btn primary" data-act="starter">Startstapel übernehmen</button>' : '<button class="btn primary" data-act="import-file">Stapel-Datei importieren</button><input type="file" accept=".json,application/json" hidden data-file>'}
+        <button class="btn ghost" data-act="new-deck">Eigener Stapel</button>
+      </div>
+    </div>`}
+  </div>
+  <button class="fab" data-act="new-deck" aria-label="Neuer Stapel">${ICON.plus}</button>`;
+  const fi = $('[data-file]'); if (fi) fi.onchange = e => importData(e.target.files[0]);
+  app.onclick = e => {
+    const deck = e.target.closest('[data-deck]');
+    if (deck) { S.deckId = deck.dataset.deck; S.view = 'deck'; S.query=''; return render(); }
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if (act === 'settings') { S.view = 'settings'; render(); }
+    if (act === 'new-deck') deckDialog();
+    if (act === 'starter') addStarter();
+    if (act === 'learn-all') startLearn(null, false);
+    if (act === 'import-file') $('[data-file]').click();
+  };
+}
+
+function renderDeck(){
+  const d = S.store.decks.get(S.deckId), cs = cardsOf(d.id), due = cs.filter(isDue).length;
+  const q = S.query.toLowerCase();
+  const shown = q ? cs.filter(c => (c.front + ' ' + c.back + ' ' + (c.source||'')).toLowerCase().includes(q)) : cs;
+  app.innerHTML = `<div class="wrap">
+    <header class="top">
+      <button class="iconbtn" data-act="back" aria-label="Zurück">${ICON.back}</button>
+      <h1>${esc(d.name)}</h1>
+      <button class="iconbtn" data-act="menu" aria-label="Stapel bearbeiten">${ICON.dots}</button>
+    </header>
+    <div class="card hero">
+      <div class="grow"><div class="big">${due}</div><div class="sub">von ${cs.length} Karten fällig</div>${boxBar(cs)}</div>
+    </div>
+    <div class="row" style="margin-bottom:8px">
+      <button class="btn primary" data-act="learn" ${due ? '' : 'disabled'}>Fällige lernen</button>
+      <button class="btn ghost" data-act="learn-free" ${cs.length ? '' : 'disabled'}>Alle durchgehen</button>
+    </div>
+    <div class="section-title">Karten</div>
+    ${cs.length > 6 ? `<input class="search" placeholder="Karten durchsuchen …" value="${esc(S.query)}" data-search>` : ''}
+    ${cs.length ? `<div class="card">${shown.map(c => `
+      <div class="list-item" data-card="${esc(c.id)}">
+        <span class="dot" style="background:${BOX_COLORS[(c.box||1)-1]}" title="Fach ${c.box||1}"></span>
+        <div style="min-width:0"><div class="q">${esc(c.front)}</div><div class="a">${esc(c.back)}</div></div>
+      </div>`).join('') || '<div class="empty">Keine Treffer</div>'}</div>`
+    : `<div class="card empty"><h3>Leerer Stapel</h3><p>Füge über den Plus-Button deine erste Karte hinzu.</p></div>`}
+  </div>
+  <button class="fab" data-act="new-card" aria-label="Neue Karte">${ICON.plus}</button>`;
+  const s = $('[data-search]');
+  if (s) s.oninput = e => { S.query = e.target.value; const pos = e.target.selectionStart; renderDeck(); const n = $('[data-search]'); n.focus(); n.setSelectionRange(pos,pos); };
+  app.onclick = e => {
+    const card = e.target.closest('[data-card]');
+    if (card) return cardDialog(S.store.cards.get(card.dataset.card));
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if (act === 'back') { S.view = 'home'; render(); }
+    if (act === 'new-card') cardDialog(null);
+    if (act === 'learn') startLearn(d.id, false);
+    if (act === 'learn-free') startLearn(d.id, true);
+    if (act === 'menu') deckMenu(d);
+  };
+}
+
+function deckMenu(d){
+  modal(`<h2>${esc(d.name)}</h2>
+    <div class="row" style="flex-direction:column;margin-top:16px">
+      <button class="btn" data-a="rename">Umbenennen</button>
+      <button class="btn" data-a="bulk">Mehrere Karten einfügen</button>
+      <button class="btn" data-a="reset">Lernfortschritt zurücksetzen</button>
+      <button class="btn danger" data-a="del">Stapel löschen</button>
+      <button class="btn ghost" data-a="x">Schließen</button>
+    </div>`, (el, close) => {
+    el.onclick = async e => {
+      const a = e.target.closest('[data-a]')?.dataset.a; if (!a) return;
+      close();
+      if (a === 'rename') deckDialog(d);
+      if (a === 'bulk') bulkDialog(d);
+      if (a === 'reset' && await confirmBox('Fortschritt zurücksetzen?', 'Alle Karten dieses Stapels kommen zurück in Fach 1.', 'Zurücksetzen')) {
+        await S.store.putCards(cardsOf(d.id).map(c => ({...c, box:1, due:0}))); render(); toast('Zurückgesetzt');
+      }
+      if (a === 'del' && await confirmBox('Stapel löschen?', `„${d.name}“ und alle ${cardsOf(d.id).length} Karten werden gelöscht.`)) {
+        await S.store.delDeck(d.id); S.view = 'home'; render(); toast('Stapel gelöscht');
+      }
+    };
+  });
+}
+
+function deckDialog(d){
+  modal(`<h2>${d ? 'Stapel umbenennen' : 'Neuer Stapel'}</h2>
+    <form><label class="f">Name</label><input class="input" name="n" required maxlength="80" placeholder="z.B. Eingriffsrecht – PolG NRW" value="${esc(d?.name || '')}">
+    <div class="actions"><button type="button" class="btn ghost" data-x>Abbrechen</button><button class="btn primary">Speichern</button></div></form>`,
+    (el, close) => {
+      const inp = $('input', el); setTimeout(() => inp.focus(), 50);
+      $('[data-x]', el).onclick = close;
+      $('form', el).onsubmit = async e => {
+        e.preventDefault(); const name = inp.value.trim(); if (!name) return;
+        const deck = d ? {...d, name} : {id: uid(), name, created: Date.now()};
+        await S.store.putDeck(deck); close();
+        if (!d) { S.deckId = deck.id; S.view = 'deck'; }
+        render();
+      };
+    });
+}
+
+function cardDialog(c){
+  const ds = decks();
+  modal(`<h2>${c ? 'Karte bearbeiten' : 'Neue Karte'}</h2>
+    <form>
+      <label class="f">Begriff / Frage (Vorderseite)</label>
+      <input class="input" name="front" required value="${esc(c?.front || '')}" placeholder="z.B. Gefahr i.S.d. PolG">
+      <label class="f">Definition / Antwort (Rückseite)</label>
+      <textarea class="input" name="back" required placeholder="Definition …">${esc(c?.back || '')}</textarea>
+      <label class="f">Fundstelle (optional)</label>
+      <input class="input" name="source" value="${esc(c?.source || '')}" placeholder="z.B. § 8 PolG NRW, Skript S. 12">
+      ${ds.length > 1 ? `<label class="f">Stapel</label><select class="input" name="deck">${ds.map(d => `<option value="${esc(d.id)}" ${d.id === (c?.deckId || S.deckId) ? 'selected' : ''}>${esc(d.name)}</option>`).join('')}</select>` : ''}
+      <div class="actions">
+        ${c ? '<button type="button" class="btn danger" data-del>Löschen</button>' : '<button type="button" class="btn ghost" data-x>Abbrechen</button>'}
+        <button class="btn primary">Speichern</button>
+      </div>
+      ${c ? '' : '<label style="display:flex;gap:8px;align-items:center;margin-top:14px;font-size:14px;color:var(--muted)"><input type="checkbox" name="more" checked> Danach weitere Karte anlegen</label>'}
+    </form>`, (el, close) => {
+    const f = $('form', el); setTimeout(() => f.front.focus(), 50);
+    $('[data-x]', el)?.addEventListener('click', close);
+    $('[data-del]', el)?.addEventListener('click', async () => {
+      close(); if (await confirmBox('Karte löschen?', c.front)) { await S.store.delCard(c.id); render(); toast('Karte gelöscht'); }
+    });
+    f.onsubmit = async e => {
+      e.preventDefault();
+      const deckId = f.deck?.value || c?.deckId || S.deckId;
+      const card = c ? {...c} : {id: uid(), created: Date.now(), box: 1, due: 0};
+      Object.assign(card, {deckId, front: f.front.value.trim(), back: f.back.value.trim(), source: f.source.value.trim()});
+      await S.store.putCard(card); render();
+      if (!c && f.more?.checked) { f.front.value = ''; f.back.value = ''; f.front.focus(); toast('Karte gespeichert'); }
+      else close();
+    };
+  });
+}
+
+function bulkDialog(d){
+  modal(`<h2>Mehrere Karten einfügen</h2>
+    <p class="sub">Erste Zeile = Begriff, folgende Zeilen = Definition. Karten durch eine <b>Leerzeile</b> trennen.</p>
+    <textarea class="input" style="min-height:220px" placeholder="Gefahr&#10;Eine Sachlage, die bei ungehindertem Ablauf …&#10;&#10;Störer&#10;Wer eine Gefahr verursacht …"></textarea>
+    <div class="actions"><button class="btn ghost" data-x>Abbrechen</button><button class="btn primary" data-ok>Einfügen</button></div>`,
+    (el, close) => {
+      $('[data-x]', el).onclick = close;
+      $('[data-ok]', el).onclick = async () => {
+        const blocks = $('textarea', el).value.replace(/\r/g,'').split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
+        const now = Date.now();
+        const list = blocks.map((b,i) => { const [front, ...rest] = b.split('\n'); return {id: uid()+i, deckId: d.id, front: front.trim(), back: rest.join('\n').trim(), source:'', box:1, due:0, created: now+i}; }).filter(c => c.front && c.back);
+        if (!list.length) return toast('Keine Karten erkannt');
+        await S.store.putCards(list); close(); render(); toast(`${list.length} Karten eingefügt`);
+      };
+    });
+}
+
+async function addStarter(){
+  const now = Date.now(); let added = 0;
+  for (const [di, sd] of STARTER.entries()) {
+    if (!S.store.decks.has(sd.id)) await S.store.putDeck({id: sd.id, name: sd.name, created: now + di});
+    const list = sd.cards.map(([front, back, source], i) => ({id: `${sd.id}-${i+1}`, deckId: sd.id, front, back, source, box:1, due:0, created: now + i}))
+      .filter(c => !S.store.cards.has(c.id));
+    added += list.length;
+    if (list.length) await S.store.putCards(list);
+  }
+  render(); toast(added ? `${added} Karten übernommen` : 'Startstapel ist schon vollständig');
+}
+
+// ================== Lernen (Leitner-System) ==================
+function startLearn(deckId, free){
+  let list = deckId ? cardsOf(deckId) : allCards();
+  if (!free) list = list.filter(isDue);
+  list = list.sort(() => Math.random() - .5).sort((a,b) => (a.box||1) - (b.box||1));
+  if (!list.length) return toast('Keine Karten fällig 🎉');
+  S.session = {deckId, free, queue: list.map(c => c.id), total: list.length, done: 0, right: 0, wrong: 0, flipped: false, seenWrong: new Set()};
+  S.view = 'learn'; renderLearn();
+}
+
+function renderLearn(){
+  const s = S.session;
+  if (!s.queue.length) {
+    app.innerHTML = `<div class="wrap"><div class="card done">
+      <div class="big">${s.wrong === 0 ? '🏆' : '✅'}</div>
+      <h2 style="margin:0 0 6px">Runde geschafft</h2>
+      <p class="sub">${s.right} gewusst · ${s.wrong} nicht gewusst</p>
+      <button class="btn primary block" style="margin-top:20px" data-act="end">Fertig</button>
+    </div></div>`;
+    app.onclick = e => { if (e.target.closest('[data-act="end"]')) endLearn(); };
+    return;
+  }
+  const c = S.store.cards.get(s.queue[0]);
+  if (!c) { s.queue.shift(); return renderLearn(); }
+  const deck = S.store.decks.get(c.deckId);
+  app.innerHTML = `<div class="wrap">
+    <div class="learn-top">
+      <button class="iconbtn" data-act="end" aria-label="Beenden">${ICON.close}</button>
+      <div class="progress"><span style="width:${s.done / s.total * 100}%"></span></div>
+      <span class="sub">${s.done}/${s.total}</span>
+    </div>
+    <div class="scene"><div class="flip card ${s.flipped ? 'on' : ''}" data-act="flip" style="box-shadow:none;border:0;background:none">
+      <div class="face card front">
+        <div class="tag">${esc(deck?.name || '')} · Fach ${c.box||1}</div>
+        <div class="front-text">${fmt(c.front)}</div>
+        <div class="hint">Tippen zum Umdrehen</div>
+      </div>
+      <div class="face card back">
+        <div class="tag">${esc(c.front)}</div>
+        <div class="back-text">${fmt(c.back)}</div>
+        ${c.source ? `<div class="src">${esc(c.source)}</div>` : ''}
+      </div>
+    </div></div>
+    <div class="answer" style="visibility:${s.flipped ? 'visible' : 'hidden'}">
+      <button class="btn bad" data-act="wrong">Nicht gewusst</button>
+      <button class="btn good" data-act="right">Gewusst</button>
+    </div>
+  </div>`;
+  app.onclick = e => {
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if (act === 'flip') { s.flipped = !s.flipped; $('.flip').classList.toggle('on', s.flipped); $('.answer').style.visibility = s.flipped ? 'visible' : 'hidden'; }
+    if (act === 'end') endLearn();
+    if (act === 'right' || act === 'wrong') answer(c, act === 'right');
+  };
+}
+
+async function answer(c, ok){
+  const s = S.session; s.queue.shift(); s.flipped = false;
+  if (ok) {
+    s.right++; s.done++;
+    if (!s.seenWrong.has(c.id)) {
+      const box = Math.min(5, (c.box||1) + 1);
+      await S.store.putCard({...c, box, due: Date.now() + INTERVALS[box-1] * DAY - 3600000, last: Date.now()});
+    }
+  } else {
+    s.wrong++;
+    if (!s.seenWrong.has(c.id)) { s.seenWrong.add(c.id); await S.store.putCard({...c, box:1, due:0, last: Date.now()}); }
+    s.queue.splice(Math.min(s.queue.length, 4), 0, c.id); // kommt in dieser Runde noch einmal
+    s.total++; s.done++;
+  }
+  renderLearn();
+}
+function endLearn(){ S.session = null; S.view = S.store.decks.has(S.deckId) && S.deckId ? 'deck' : 'home'; render(); }
+document.addEventListener('keydown', e => {
+  if (S.view !== 'learn' || !S.session?.queue.length || document.querySelector('.modal-bg')) return;
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); $('[data-act="flip"]')?.click(); }
+  if (S.session.flipped && (e.key === 'ArrowRight' || e.key === '2')) $('[data-act="right"]')?.click();
+  if (S.session.flipped && (e.key === 'ArrowLeft' || e.key === '1')) $('[data-act="wrong"]')?.click();
+});
+
+// ================== Einstellungen ==================
+function renderSettings(){
+  const theme = storage.get('kk-theme') || 'auto';
+  app.innerHTML = `<div class="wrap">
+    <header class="top"><button class="iconbtn" data-act="back" aria-label="Zurück">${ICON.back}</button><h1>Einstellungen</h1></header>
+    <div class="card">
+      <div class="settings-item"><div class="t">Konto</div>
+        ${S.store.mode === 'cloud'
+          ? `<div class="d">Angemeldet als ${esc(S.user.email)}. Deine Karten werden zwischen allen Geräten synchronisiert.</div><button class="btn ghost" data-act="logout">Abmelden</button>`
+          : `<div class="d">Lokaler Modus: Die Karten sind nur auf diesem Gerät gespeichert. Konten und Synchronisierung werden aktiv, sobald die App mit Firebase verbunden ist.</div>`}
+      </div>
+      <div class="settings-item"><div class="t">Darstellung</div><div class="d">Hell, dunkel oder wie das Gerät.</div>
+        <div class="seg">${[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(([k,l]) => `<button data-theme="${k}" class="${theme===k?'on':''}">${l}</button>`).join('')}</div>
+      </div>
+      ${STARTER.length ? '' : '<!--'}<div class="settings-item"><div class="t">Startstapel HSPV</div><div class="d">Karten aus den Strafrecht-AT-Skripten (Kausalität, Notwehr) hinzufügen. Vorhandene Karten bleiben unverändert.</div>
+        <button class="btn ghost" data-act="starter">Startstapel übernehmen</button></div>${STARTER.length ? '' : '-->'}
+      <div class="settings-item"><div class="t">Sichern & Übertragen</div><div class="d">Alle Stapel als Datei sichern oder eine Sicherung einlesen.</div>
+        <div class="row"><button class="btn ghost" data-act="export">Exportieren</button><button class="btn ghost" data-act="import">Importieren</button></div>
+        <input type="file" accept=".json,application/json" hidden data-file></div>
+      <div class="settings-item"><div class="t">So funktioniert das Lernsystem</div>
+        <div class="d" style="margin:2px 0 0">Neue Karten starten in Fach 1. „Gewusst“ schiebt eine Karte ein Fach weiter, „Nicht gewusst“ zurück in Fach 1. Fällig wird eine Karte nach: Fach 1 sofort · Fach 2 nach 1 Tag · Fach 3 nach 3 Tagen · Fach 4 nach 7 Tagen · Fach 5 nach 16 Tagen.</div></div>
+    </div>
+  </div>`;
+  app.onclick = async e => {
+    const th = e.target.closest('[data-theme]')?.dataset.theme;
+    if (th) { storage.set('kk-theme', th); applyTheme(); return renderSettings(); }
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if (act === 'back') { S.view = 'home'; render(); }
+    if (act === 'starter') { await addStarter(); S.view = 'home'; render(); }
+    if (act === 'logout') { S.store.stop?.(); await S.fb.signOut(S.fb.auth); }
+    if (act === 'export') exportData();
+    if (act === 'import') $('[data-file]').click();
+  };
+  $('[data-file]').onchange = e => importData(e.target.files[0]);
+}
+
+function exportData(){
+  const json = JSON.stringify({app:'karteikarten-hspv', version:1, exported:new Date().toISOString(), decks: decks(), cards: allCards()}, null, 1);
+  try {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([json], {type:'application/json'}));
+    a.download = `karteikarten-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+  } catch {}
+  modal(`<h2>Export</h2><p class="sub">Falls kein Download gestartet ist, kannst du die Daten kopieren und als .json-Datei speichern.</p>
+    <div class="actions"><button class="btn ghost" data-x>Schließen</button><button class="btn primary" data-copy>Kopieren</button></div>`,
+    (el, close) => {
+      $('[data-x]', el).onclick = close;
+      $('[data-copy]', el).onclick = async () => { try { await navigator.clipboard.writeText(json); toast('Kopiert'); close(); } catch { toast('Kopieren nicht möglich'); } };
+    });
+}
+
+async function importData(file){
+  if (!file) return;
+  try {
+    const d = JSON.parse(await file.text());
+    if (!Array.isArray(d.decks) || !Array.isArray(d.cards)) throw 0;
+    for (const deck of d.decks) await S.store.putDeck(deck);
+    await S.store.putCards(d.cards);
+    toast(`${d.decks.length} Stapel, ${d.cards.length} Karten importiert`); S.view = 'home'; render();
+  } catch { toast('Datei konnte nicht gelesen werden'); }
+}
+
+// ================== Anmeldung (nur mit Firebase) ==================
+function renderAuth(mode='login', err=''){
+  const reg = mode === 'register';
+  app.innerHTML = `<div class="card auth">
+    <div class="logo">${ICON.cards}</div>
+    <h1 style="margin:0 0 4px;font-size:24px;letter-spacing:-.02em">${reg ? 'Konto erstellen' : 'Willkommen zurück'}</h1>
+    <p class="sub" style="margin:0 0 10px">Karteikarten für das Studium an der HSPV</p>
+    <form>
+      <label class="f">E-Mail</label><input class="input" type="email" name="email" autocomplete="email" required>
+      <label class="f">Passwort</label><input class="input" type="password" name="pw" autocomplete="${reg ? 'new-password' : 'current-password'}" minlength="6" required>
+      <div class="err">${esc(err)}</div>
+      <button class="btn primary block">${reg ? 'Registrieren' : 'Anmelden'}</button>
+    </form>
+    <p class="sub" style="text-align:center;margin:18px 0 0">${reg ? 'Schon ein Konto?' : 'Noch kein Konto?'} <button class="link" data-switch>${reg ? 'Anmelden' : 'Registrieren'}</button></p>
+    ${reg ? '' : '<p class="sub" style="text-align:center;margin:8px 0 0"><button class="link" data-reset>Passwort vergessen?</button></p>'}
+  </div>`;
+  const f = $('form');
+  $('[data-switch]').onclick = () => renderAuth(reg ? 'login' : 'register');
+  $('[data-reset]')?.addEventListener('click', async () => {
+    if (!f.email.value) return renderAuth('login', 'Bitte zuerst die E-Mail-Adresse eingeben.');
+    try { await S.fb.sendPasswordResetEmail(S.fb.auth, f.email.value); toast('E-Mail zum Zurücksetzen gesendet'); }
+    catch (e) { $('.err').textContent = authError(e); }
+  });
+  f.onsubmit = async e => {
+    e.preventDefault(); const b = $('button.primary', f); b.disabled = true;
+    try {
+      if (reg) await S.fb.createUserWithEmailAndPassword(S.fb.auth, f.email.value.trim(), f.pw.value);
+      else await S.fb.signInWithEmailAndPassword(S.fb.auth, f.email.value.trim(), f.pw.value);
+    } catch (e) { b.disabled = false; $('.err').textContent = authError(e); }
+  };
+}
+function authError(e){
+  const m = {
+    'auth/invalid-email':'Ungültige E-Mail-Adresse.', 'auth/email-already-in-use':'Für diese E-Mail gibt es schon ein Konto.',
+    'auth/weak-password':'Das Passwort muss mindestens 6 Zeichen haben.', 'auth/invalid-credential':'E-Mail oder Passwort ist falsch.',
+    'auth/wrong-password':'E-Mail oder Passwort ist falsch.', 'auth/user-not-found':'Kein Konto mit dieser E-Mail gefunden.',
+    'auth/too-many-requests':'Zu viele Versuche. Bitte kurz warten.', 'auth/network-request-failed':'Keine Internetverbindung.',
+  };
+  return m[e?.code] || 'Etwas ist schiefgelaufen. Bitte erneut versuchen.';
+}
+
+// ================== Start ==================
+async function boot(){
+  const cfg = window.FIREBASE_CONFIG;
+  if (!cfg || !cfg.apiKey) {
+    S.store = new LocalStore(); await S.store.start(render); return;
+  }
+  app.innerHTML = '<div class="wrap"><p class="sub" style="text-align:center;margin-top:30vh">Lädt …</p></div>';
+  const V = '10.12.2', base = `https://www.gstatic.com/firebasejs/${V}`;
+  const [A, U, F] = await Promise.all([import(`${base}/firebase-app.js`), import(`${base}/firebase-auth.js`), import(`${base}/firebase-firestore.js`)]);
+  const fbApp = A.initializeApp(cfg);
+  let db;
+  try { db = F.initializeFirestore(fbApp, {localCache: F.persistentLocalCache({tabManager: F.persistentMultipleTabManager()})}); }
+  catch { db = F.getFirestore(fbApp); }
+  S.fb = {...U, ...F, auth: U.getAuth(fbApp), db};
+  U.onAuthStateChanged(S.fb.auth, async user => {
+    S.store?.stop?.(); S.user = user; S.view = 'home'; S.session = null;
+    if (!user) return renderAuth();
+    S.store = new FirebaseStore(S.fb, user);
+    app.innerHTML = '<div class="wrap"><p class="sub" style="text-align:center;margin-top:30vh">Karten werden geladen …</p></div>';
+    await S.store.start(render);
+  });
+}
+boot();
+
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
